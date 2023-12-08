@@ -1,9 +1,3 @@
-/*
-    @author: ciphernova
-    @date: 2023/12/08
-    @description: This file defines the schema for the alert collection
- */
-
 const mongoose = require("mongoose")
 const dbEnum = require("../enum/db.enum")
 const alertTypeEnum = require("../enum/alert.type.enum");
