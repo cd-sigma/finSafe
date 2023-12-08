@@ -10,9 +10,8 @@ const resStatusEnum = require("../enum/res.status.enum")
  * @param data
  * @param error
  * @param {number} status
- * @param performanceStats
  */
-async function sendResponse(res, data, error, status, performanceStats = null) {
+async function sendResponse(res, data, error, status) {
     let responseToSend = {}
     try {
         if (validatorUtil.isNil(status)) {
@@ -30,11 +29,8 @@ async function sendResponse(res, data, error, status, performanceStats = null) {
                 }
                 responseToSend = {
                     result: {
-                        message: "Success",
-                        data: data,
-                        error: null,
-                    },
-                    status: resStatusEnum.SUCCESS,
+                        message: "Success", data: data, error: null,
+                    }, status: resStatusEnum.SUCCESS,
                 }
                 break
             case resStatusEnum.VALIDATION_ERROR: {
@@ -43,11 +39,8 @@ async function sendResponse(res, data, error, status, performanceStats = null) {
                 }
                 responseToSend = {
                     result: {
-                        message: "Bad request",
-                        data: data,
-                        error: error,
-                    },
-                    status: resStatusEnum.VALIDATION_ERROR,
+                        message: "Bad request", data: data, error: error,
+                    }, status: resStatusEnum.VALIDATION_ERROR,
                 }
             }
                 break
@@ -57,66 +50,48 @@ async function sendResponse(res, data, error, status, performanceStats = null) {
                 }
                 responseToSend = {
                     result: {
-                        message: "Resource Not Found",
-                        data: data,
-                        error: error,
-                    },
-                    status: resStatusEnum.NOT_FOUND,
+                        message: "Resource Not Found", data: data, error: error,
+                    }, status: resStatusEnum.NOT_FOUND,
                 }
             }
                 break
             case resStatusEnum.INTERNAL_SERVER_ERROR: {
                 responseToSend = {
                     result: {
-                        message: "Internal Server Error",
-                        data: data,
-                        error: util.inspect(error),
-                    },
-                    status: resStatusEnum.INTERNAL_SERVER_ERROR,
+                        message: "Internal Server Error", data: data, error: util.inspect(error),
+                    }, status: resStatusEnum.INTERNAL_SERVER_ERROR,
                 }
             }
                 break
             case resStatusEnum.UNAUTHORIZED: {
                 responseToSend = {
                     result: {
-                        message: "Unauthorized",
-                        data: data,
-                        error: error,
-                    },
-                    status: resStatusEnum.UNAUTHORIZED,
+                        message: "Unauthorized", data: data, error: error,
+                    }, status: resStatusEnum.UNAUTHORIZED,
                 }
             }
                 break
             case resStatusEnum.TOO_MANY_REQUESTS: {
                 responseToSend = {
                     result: {
-                        message: "Too many requests",
-                        data: data,
-                        error: error,
-                    },
-                    status: resStatusEnum.TOO_MANY_REQUESTS,
+                        message: "Too many requests", data: data, error: error,
+                    }, status: resStatusEnum.TOO_MANY_REQUESTS,
                 }
             }
                 break
             case resStatusEnum.CONFLICT: {
                 responseToSend = {
                     result: {
-                        message: "Conflict",
-                        data: data,
-                        error: error,
-                    },
-                    status: resStatusEnum.CONFLICT,
+                        message: "Conflict", data: data, error: error,
+                    }, status: resStatusEnum.CONFLICT,
                 }
             }
                 break
             case resStatusEnum.ACCEPTED: {
                 responseToSend = {
                     result: {
-                        message: "ACCEPTED",
-                        data: data,
-                        error: null,
-                    },
-                    status: resStatusEnum.ACCEPTED,
+                        message: "ACCEPTED", data: data, error: null,
+                    }, status: resStatusEnum.ACCEPTED,
                 }
             }
                 break
