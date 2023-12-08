@@ -29,7 +29,7 @@ const alertTypeEnum = require("../enum/alert.type.enum");
             }, discordAlertProcessingBatchLimit, 0);
 
             if (alerts.length === 0) {
-                const sleepTime = await dpLib.getDp(dpEnum.ALERTING_SERVICE_SLEEPTIME, serviceConfig.alerting.discord.defaultSleepTime);
+                const sleepTime = await dpLib.getDp(dpEnum.DISCORD_ALERTING_SERVICE_SLEEPTIME, serviceConfig.alerting.discord.defaultSleepTime);
                 consoleLib.logInfo(`No alerts found to be sent!`);
                 await helperUtil.sleep(sleepTime);
                 continue;
@@ -52,18 +52,19 @@ const alertTypeEnum = require("../enum/alert.type.enum");
             }
             let alertSendingResults = await Promise.allSettled(alertSendingCalls);
 
-            let alertUpdateCalls = [], failedAlertInsertionCalls = [];
+            let alertUpdateCalls = [], failedAlertInsertionCalls = [], successfulAlertsCount = 0, failedAlertsCount = 0;
             alertSendingResults.forEach((alertSendingResult, iterAlert) => {
                 if (alertSendingResult.status === "fulfilled") {
                     alertUpdateCalls.push(mongoLib.findOneAndUpdate(discordAlertModel, {_id: alerts[iterAlert]._id}, {isSent: true}));
+                    successfulAlertsCount++;
                 } else {
-                    consoleLib.logError(`Failed to send alert with id : ${alerts[iterAlert]._id}!`);
                     alertUpdateCalls.push(mongoLib.findOneAndUpdate(discordAlertModel, {_id: alerts[iterAlert]._id}, {isFailed: true}));
                     failedAlertInsertionCalls.push(mongoLib.createDoc(failedAlertModel, {
                         alertId: alerts[iterAlert]._id,
                         reason: util.inspect(alertSendingResult.reason),
                         type: alertTypeEnum.DISCORD
                     }));
+                    failedAlertsCount++;
                 }
             });
             await Promise.all(alertUpdateCalls);
@@ -72,11 +73,11 @@ const alertTypeEnum = require("../enum/alert.type.enum");
             consoleLib.logInfo({
                 message: `Alerts sent successfully!`,
                 totalAlerts: alerts.length,
-                failedAlerts: failedAlertInsertionCalls.length,
-                successfulAlerts: alertUpdateCalls.length
+                failedAlerts: failedAlertsCount,
+                successfulAlerts: successfulAlertsCount
             })
 
-            const sleepTime = await dpLib.getDp(dpEnum.ALERTING_SERVICE_SLEEPTIME, serviceConfig.alerting.discord.defaultSleepTime);
+            const sleepTime = await dpLib.getDp(dpEnum.DISCORD_ALERTING_SERVICE_SLEEPTIME, serviceConfig.alerting.discord.defaultSleepTime);
             await helperUtil.sleep(sleepTime);
         }
     } catch (error) {
