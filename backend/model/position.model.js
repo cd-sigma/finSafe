@@ -1,8 +1,3 @@
-/*
-    @author: ciphernova
-    @date: 2023/07/11
-    @description: This file defines the schema for the positions collection
- */
 
 const mongoose = require('mongoose');
 const dbEnum = require("../enum/db.enum");

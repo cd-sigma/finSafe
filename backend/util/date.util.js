@@ -1,9 +1,3 @@
-/*
-    @author: ciphernova
-    @date: 2023/11/23
-    @description: This file contains all the time related functions
- */
-
 function getCurrentTimestamp() {
     return Date.now();
 }

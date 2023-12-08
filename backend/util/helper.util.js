@@ -1,23 +1,14 @@
-/*
-    @author: ciphernova
-    @date: 2023/07/11
-    @description: This file contains helper functions that are used throughout the project.
- */
-
 async function sleep(duration) {
-    return new Promise(async (resolve, reject) => {
-        try {
-            if (duration == null) {
-                throw new Error(`Please specify the sleep duration!`)
-            }
-
-            await new Promise((resolve) => setTimeout(resolve, duration))
-
-            resolve()
-        } catch (error) {
-            reject(error)
+    try {
+        if (duration == null) {
+            throw new Error(`Please specify the sleep duration!`)
         }
-    })
+
+        await new Promise((resolve) => setTimeout(resolve, duration))
+
+    } catch (error) {
+        throw error
+    }
 }
 
 function removeLeadingZeroes(hex) {
@@ -34,14 +25,10 @@ function bytesToUtf8(bytes, web3) {
 //recursively spread json into string
 function spreadJson(json) {
     return Object.keys(json)
-        .map((key) => `${key}:${typeof json[key] === "object" ? "\n\t" + spreadJson(json[key]).replace(/\n/g, "\n\t")
-            : json[key]}`)
+        .map((key) => `${key}:${typeof json[key] === "object" ? "\n\t" + spreadJson(json[key]).replace(/\n/g, "\n\t") : json[key]}`)
         .join("\n")
 }
 
 module.exports = {
-    sleep: sleep,
-    removeLeadingZeroes: removeLeadingZeroes,
-    bytesToUtf8: bytesToUtf8,
-    spreadJson: spreadJson
+    sleep: sleep, removeLeadingZeroes: removeLeadingZeroes, bytesToUtf8: bytesToUtf8, spreadJson: spreadJson
 }
