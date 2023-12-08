@@ -1,9 +1,3 @@
-/*
-    @author: ciphernova
-    @date: 2023/08/20
-    @description: This library contains the functions to get the price of the token from different sources.
- */
-
 const _ = require('lodash');
 
 const chainlinkPriceOracleAbi = require('../abi/chainlink.oracle.abi.json');

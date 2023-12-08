@@ -1,9 +1,3 @@
-/*
-    @author: ciphernova
-    @date: 2023/07/11
-    @description: This service is responsible for updating the positions in the database
- */
-
 require("../node/node.env");
 const fs = require("fs");
 const _ = require("lodash");

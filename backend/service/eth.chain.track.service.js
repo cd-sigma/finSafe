@@ -1,9 +1,3 @@
-/*
-    @author: ciphernova
-    @date: 2023/12/08
-    @description: This service is responsible for updating the positions in the database based on on chain activity
- */
-
 require("../node/node.env");
 const _ = require("lodash");
 const serviceConfig = require("../config/service.config");

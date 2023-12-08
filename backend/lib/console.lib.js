@@ -1,9 +1,3 @@
-/*
-    @author: ciphernova
-    @date: 2023/11/23
-    @description: This file contains the console logging functions
- */
-
 const util = require('util');
 const chalk = require('chalk');
 const dateUtil = require('../util/date.util');

@@ -1,8 +1,3 @@
-/*
-    @author: ciphernova
-    @date: 2023/07/30
-    @description: This task is used to build the historical data for a given protocol, chain and group.
- */
 
 require("../node/node.env");
 const _ = require('lodash');

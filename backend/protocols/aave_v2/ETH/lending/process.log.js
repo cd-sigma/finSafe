@@ -1,9 +1,3 @@
-/*
-    @author: ciphernova
-    @date: 2023/07/23
-    @description: This file defines the function to process a log and generate a position object
- */
-
 const _ = require("lodash");
 const groupConfig = require("./config.json");
 

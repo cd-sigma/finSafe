@@ -1,9 +1,3 @@
-/*
-    @author: ciphernova
-    @date: 2023/07/11
-    @description: This library contains all the functions related to web3
- */
-
 const _ = require("lodash");
 const Web3 = require("web3");
 const axios = require("axios");

@@ -1,9 +1,3 @@
-/*
-    @author: ciphernova
-    @date: 2023/07/11
-    @description: This file contains helper functions that are used throughout the project.
- */
-
 async function sleep(duration) {
     return new Promise(async (resolve, reject) => {
         try {

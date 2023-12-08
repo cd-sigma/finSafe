@@ -1,9 +1,3 @@
-/*
-    @author: ciphernova
-    @date: 2023/07/23
-    @description: This file defines the function to update a position by fetching the latest data from the smart contracts
- */
-
 const erc20Abi = require("../../../../abi/erc20.abi.json");
 const lendingPoolAbi = require("../../abi/lending.pool.abi.json");
 const LENDING_POOL_ADDRESS = "0x7d2768de32b0b80b7a3454c06bdac94a69ddc7a9";

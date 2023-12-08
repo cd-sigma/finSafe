@@ -1,8 +1,3 @@
-/*
-    @author: ciphernova
-    @date: 2023/07/11
-    @description: Ingests trigger points from the protocol config files into the database
- */
 
 require("../node/node.env");
 const fs = require('fs');

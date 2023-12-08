@@ -1,9 +1,3 @@
-/*
-    @author: ciphernova
-    @date: 2023/07/30
-    @description: This library contains functions related to storing the sync status of a service.
- */
-
 const _ = require("lodash")
 
 const mongoLib = require("./mongo.lib")

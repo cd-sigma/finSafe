@@ -1,9 +1,3 @@
-/*
-    @author: ciphernova
-    @date: 2023/11/23
-    @description: This library is used to connect and interact with mongoDB
- */
-
 const mongoose = require("mongoose")
 const consoleLib = require("./console.lib")
 
