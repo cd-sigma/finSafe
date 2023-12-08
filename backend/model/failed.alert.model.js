@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 const dbEnum = require("../enum/db.enum")
-const alertFailureReasonEnum = require("../enum/alert.failure.reason.enum");
+const alertTypeEnum = require("../enum/alert.type.enum");
 
 const failedAlertSchema = new mongoose.Schema({
     alertId: {
@@ -9,7 +9,11 @@ const failedAlertSchema = new mongoose.Schema({
     },
     reason: {
         type: String,
-        enum: Object.values(alertFailureReasonEnum),
+        required: true
+    },
+    type: {
+        type: String,
+        enum: Object.values(alertTypeEnum),
         required: true
     },
     haveRetried: {
