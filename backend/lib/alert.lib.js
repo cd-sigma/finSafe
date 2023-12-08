@@ -1,8 +1,22 @@
-const validatorUtil = require("../util/validators.util");
+const mongoLib = require("../mongo.lib");
 const errorUtil = require("../util/error.util");
-const enumUtil = require("../util/enum.util");
-const alertTypeEnum = require("../enum/alert.enum");
-const emailLib = require("../lib/email.lib");
+const alertModel = require("../../model/alert.model");
+const validatorUtil = require("../../util/validators.util");
+
+async function generateAlert(address, content) {
+    try {
+        if (validatorUtil.isEmpty(address) || validatorUtil.isEmpty(content)) {
+            errorUtil.throwErr(`Invalid address or content! address : ${address}, content : ${content}`);
+        }
+
+        await mongoLib.createDoc(alertModel, {
+            address: address.toLowerCase(),
+            content: content
+        });
+    } catch (error) {
+        throw error;
+    }
+}
 
 function validateEmailOptions(options = {}) {
   if (
@@ -15,29 +29,8 @@ function validateEmailOptions(options = {}) {
   }
 }
 
-async function sendAlert(alertType, options = {}) {
-  try {
-    if (enumUtil.isNotValidEnumValue(alertType, alertTypeEnum)) {
-      errorUtil.throwErr("validation error alertType = " + alertType);
-    }
-    switch (alertType) {
-      case alertTypeEnum.EMAIL:
-        validateEmailOptions(options);
-        await emailLib.sendEmail(
-          options.receiverEmail,
-          options.subject,
-          options.text
-        );
-        break;
-      default:
-        errorUtil.throwErr("Illegal state exception for alertTypeEnum");
-    }
-  } catch (e) {
-    throw e;
-  }
-}
 
 module.exports = {
-  sendAlert: sendAlert,
+  generateAlert: generateAlert,
   validateEmailOptions: validateEmailOptions,
 };
