@@ -1,6 +1,6 @@
 async function sendAlert(alert) {
     try {
-        //TODO: Send alert to discord here
+        //TODO: Send alert using push
     } catch (error) {
         throw error;
     }
