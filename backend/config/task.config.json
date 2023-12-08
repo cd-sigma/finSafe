@@ -1,0 +1,5 @@
+{
+  "protocolHistoryBuilder": {
+    "blockProcessingBatchSize": 500
+  }
+}
