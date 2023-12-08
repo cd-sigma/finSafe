@@ -18,7 +18,21 @@
     }
   },
   "alerting": {
-    "defaultBatchProcessingLimit": 50,
-    "defaultSleepTime": 5000
+    "discord": {
+      "defaultBatchProcessingLimit": 50,
+      "defaultSleepTime": 5000
+    },
+    "slack": {
+      "defaultBatchProcessingLimit": 50,
+      "defaultSleepTime": 5000
+    },
+    "push": {
+      "defaultBatchProcessingLimit": 50,
+      "defaultSleepTime": 5000
+    },
+    "email": {
+      "defaultBatchProcessingLimit": 50,
+      "defaultSleepTime": 5000
+    }
   }
 }

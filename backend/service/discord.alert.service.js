@@ -3,7 +3,7 @@ const util = require("util");
 
 const dpLib = require("../lib/dp.lib");
 const mongoLib = require("../lib/mongo.lib");
-const discordLib = require("../lib/alert/discord.lib");
+const discordLib = require("../lib/discord.lib");
 const consoleLib = require("../lib/console.lib");
 const helperUtil = require("../util/helper.util");
 const validatorUtil = require("../util/validators.util");
