@@ -1,0 +1,26 @@
+{
+  "geth": {
+    "name": "Azure GETH",
+    "ip": "4.240.105.74",
+    "cloud": "AZURE",
+    "cpu": 8,
+    "ram": "32 GB",
+    "disk": "2 TB"
+  },
+  "mongo": {
+    "name": "Azure MONGO",
+    "ip": "98.70.56.109",
+    "cloud": "AZURE",
+    "cpu": 2,
+    "ram": "4 GB",
+    "disk": "150 GB"
+  },
+  "backend": {
+    "name": "Azure BACKEND",
+    "ip": "98.70.49.217",
+    "cloud": "AZURE",
+    "cpu": 4,
+    "ram": "16 GB",
+    "disk": "30 GB"
+  }
+}

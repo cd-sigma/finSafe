@@ -6,7 +6,6 @@
 
 const mongoose = require('mongoose');
 const dbEnum = require("../enum/db.enum");
-// const positionVulnerabilityEnum = require("../enum/position.vulnerability.enum");
 
 const positionSchema = new mongoose.Schema({
     protocolId: {
