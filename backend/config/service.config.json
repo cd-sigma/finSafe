@@ -1,0 +1,24 @@
+{
+  "chainTracker": {
+    "eth": {
+      "syncName": "chain_tracker",
+      "chain": "ETH",
+      "syncUpdateInterval": 10,
+      "sleepTime": 3000,
+      "serviceEnabledByDefault": true
+    }
+  },
+  "positionUpdators": {
+    "eth": {
+      "syncName": "position_updator",
+      "chain": "ETH",
+      "batchSize": 100,
+      "serviceEnabledByDefault": true,
+      "sleepTime": 5000
+    }
+  },
+  "alerting": {
+    "defaultBatchProcessingLimit": 50,
+    "defaultSleepTime": 5000
+  }
+}
