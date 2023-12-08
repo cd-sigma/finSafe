@@ -70,6 +70,19 @@ async function generateAlert(address, content) {
     }
 }
 
-module.exports = {
-    generateAlert: generateAlert
+function validateEmailOptions(options = {}) {
+  if (
+    validatorUtil.isEmpty(options) ||
+    validatorUtil.isEmpty(options.receiverEmail) ||
+    validatorUtil.isEmpty(options.subject) ||
+    validatorUtil.isEmpty(options.text)
+  ) {
+    errorUtil.throwErr("validation error for email type notifications");
+  }
 }
+
+
+module.exports = {
+  generateAlert: generateAlert,
+  validateEmailOptions: validateEmailOptions,
+};

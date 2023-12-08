@@ -1,11 +1,14 @@
-import './App.css';
+import "./App.css";
+
+// Components
+import Navbar from "./components/Navbar";
+import HomePage from "./components/HomePage";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        finsafe
-      </header>
+      <Navbar />
+      <HomePage />
     </div>
   );
 }
