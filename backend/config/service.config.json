@@ -34,5 +34,9 @@
       "defaultBatchProcessingLimit": 50,
       "defaultSleepTime": 5000
     }
+  },
+  "cmtOrderExecutor": {
+    "defaultBatchProcessingLimit": 50,
+    "defaultSleepTime": 5000
   }
 }
