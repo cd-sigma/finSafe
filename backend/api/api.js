@@ -7,6 +7,7 @@ const mongoLib = require("../lib/mongo.lib")
 const consoleLib = require("../lib/console.lib")
 const responseLib = require("../lib/response.lib")
 
+const cmtRoutes= require("./routes/cmt.route")
 const userRoutes = require("./routes/user.route")
 const feedRoutes = require("./routes/feed.route")
 const alertRoutes= require("./routes/alert.route")
@@ -30,6 +31,7 @@ const port = 3001
             return responseLib.sendResponse(res, {status: 200, health: "GREEN"}, null, 200)
         })
 
+        app.use("/cmt", cmtRoutes)
         app.use("/user", userRoutes)
         app.use("/token", tokenRoutes)
         app.use("/feed", feedRoutes)
