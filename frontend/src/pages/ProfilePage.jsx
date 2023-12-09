@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 
 import Navbar from "../components/Navbar";
+import {FeedPage} from "./FeedPage";
 
 const ProfilePage = () => {
   const [currentTab, setCurrentTab] = React.useState(0);
@@ -82,7 +83,7 @@ const ProfilePage = () => {
             )}
             {currentTab === 1 && (
               <div>
-                <Typography variant="h6">Feed Content Goes Here</Typography>
+                <FeedPage/>
               </div>
             )}
           </div>
