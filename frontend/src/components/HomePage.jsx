@@ -4,15 +4,17 @@ import ConnectWalletButton from "./ConnectWalltet/Walltet";
 import axios from "axios";
 import {useUserStore} from "../store/userStore";
 import Onboarding from "./Onboarding/Onboarding";
+
+import { ethers } from "ethers";
 const HomePage = () => {
   const [loading, setLoading] = useState(false);
   const userAddress = useUserStore((state) => state.userAddress);
   const setUserAddress = useUserStore((state) => state.setUserAddress)
   const [open, setOpen] = useState(false);
+  const [signer, setSigner] = useState(null);
   
   const onPressConnect = async () => {
     setLoading(true);
-  
     try {
       if (window?.ethereum?.isMetaMask) {
         // Desktop browser
@@ -20,24 +22,23 @@ const HomePage = () => {
           method: "eth_requestAccounts",
         });
 
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const signer = provider.getSigner();
+        setSigner(signer);
         let account = Web3.utils.toChecksumAddress(accounts[0]);
         setUserAddress(account);
         account = account.toLowerCase();
-        // get nonce
+
         const nonce = await axios.get(
           `https://finsafe-backend.insidefi.io/user/nonce/${account}`
-          );
+        );
 
-          console.log("nonce", nonce.data.result.data.nonce);
-          const message = `Welcome to FINSAFE! \n\nPlease sign in and authorize. By signing in, you agree to our Terms of Service  and Privacy Policy .\n\nThis request will not trigger a blockchain transaction or cost any gas fees.\n\nWallet address:\n${account}\n\nNonce:\n${nonce.data.result.data.nonce}`;
-          console.log("message", message)
-        // sign message
+        const message = `Welcome to FINSAFE! \n\nPlease sign in and authorize. By signing in, you agree to our Terms of Service  and Privacy Policy .\n\nThis request will not trigger a blockchain transaction or cost any gas fees.\n\nWallet address:\n${account}\n\nNonce:\n${nonce.data.result.data.nonce}`;
 
         const signature = await window.ethereum.request({
           method: "personal_sign",
           params: [message, account],
         });
-
 
         const response = await axios.post(
           "https://finsafe-backend.insidefi.io/user/validate/signature",
@@ -90,7 +91,7 @@ const HomePage = () => {
       loading={loading}
       address={userAddress}
     />
-    <Onboarding open={open} setOpen={setOpen} />
+    <Onboarding open={open} setOpen={setOpen} signer={signer} />
   </div>
   );
 };
