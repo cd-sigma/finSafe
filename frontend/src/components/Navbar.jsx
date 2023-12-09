@@ -41,16 +41,14 @@ const Navbar = () => {
               onSubmit={(e) => {
                 e.preventDefault();
                 navigate(`/profile/${search}`);
-                console.log('search'); 
               }}
               onKeyDown={handleKeyDown}
-          
             />
           </div>
         </div>
 
         {/* Button on the Right */}
-        <Button color="inherit" sx={{border:"1px solid white"}}>Connect Wallet</Button>
+        {/* <Button color="inherit" sx={{border:"1px solid white"}}>Connect Wallet</Button> */}
       </Toolbar>
     </AppBar>
   );

@@ -12,12 +12,11 @@ import { useUserStore } from "../store/userStore";
 
 import { getPortfolioDetails, getTokenDetails } from "../api/profile.api";
 
-const PortfolioDetails = () => {
+const PortfolioDetails = ({searchId}) => {
   const [suppliedDetails, setSuppliedDetails] = useState([]);
   const [borrowedDetails, setBorrowedDetails] = useState([]);
   let userAddress = useUserStore((state) => state.userAddress);
   userAddress = "0xb63e8a8d04999500a97470769d10c4395789836d";
-
   const convertSuppliedToDesiredFormat = async (array) => {
     try {
       const result = await Promise.all(
@@ -73,7 +72,7 @@ const PortfolioDetails = () => {
   };
 
   const callApis = async () => {
-    const details = await getPortfolioDetails(userAddress);
+    const details = await getPortfolioDetails(searchId);
     const { metadata } = details[0];
     const { supplied, borrowed } = metadata;
     const derivedSupplied = await convertSuppliedToDesiredFormat(supplied);
@@ -83,7 +82,7 @@ const PortfolioDetails = () => {
   };
   useEffect(() => {
     callApis();
-  }, []);
+  }, [searchId]);
   //   console.log(suppliedDetails);
   return (
     <TableContainer component={Paper}>

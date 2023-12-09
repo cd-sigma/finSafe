@@ -18,6 +18,7 @@ const ProfilePage = () => {
   const handleTabChange = (event, newValue) => {
     setCurrentTab(newValue);
   };
+  const searchId=window.location.pathname.split('/')[2];
 
   return (
     <>
@@ -78,7 +79,7 @@ const ProfilePage = () => {
             {currentTab === 0 && (
               <div>
                 <Typography variant="h6">
-                  <PortfolioDetails/>
+                  <PortfolioDetails searchId={searchId}/>
                 </Typography>
               </div>
             )}
