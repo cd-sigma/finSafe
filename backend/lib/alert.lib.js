@@ -13,12 +13,13 @@ const alertModels = {
     [alertTypeEnum.DISCORD]: require("../model/discord.alert.model"),
     [alertTypeEnum.EMAIL]: require("../model/email.alert.model")
 }
+const alertModel = require("../model/alert.model");
 const nonUserAlertModel = require("../model/non.user.alert.model");
 
-async function generateAlert(address, title, content) {
+async function generateAlert(address, title, body) {
     try {
-        if (validatorUtil.isEmpty(address) || validatorUtil.isEmpty(content) || validatorUtil.isEmpty(title)) {
-            errorUtil.throwErr(`Invalid address, title or content! address : ${address}, content : ${content}, title : ${title}`);
+        if (validatorUtil.isEmpty(address) || validatorUtil.isEmpty(body) || validatorUtil.isEmpty(title)) {
+            errorUtil.throwErr(`Invalid address, title or body! address : ${address}, body : ${body}, title : ${title}`);
         }
 
         //No need to generate alert for null address
@@ -31,7 +32,7 @@ async function generateAlert(address, title, content) {
             await mongoLib.createDoc(nonUserAlertModel, {
                 address: address.toLowerCase(),
                 title: title,
-                body: content
+                body: body
             })
             return;
         }
@@ -40,10 +41,16 @@ async function generateAlert(address, title, content) {
             await mongoLib.createDoc(nonUserAlertModel, {
                 address: address.toLowerCase(),
                 title: title,
-                body: content
+                body: body
             });
             return;
         }
+
+        await mongoLib.createDoc(alertModel, {
+            address: address.toLowerCase(),
+            title: title,
+            body: body,
+        });
 
         let alertInsertionCalls = [];
         for (let iterAlertPreference = 0; iterAlertPreference < user.alertPreferences.length; iterAlertPreference++) {
@@ -52,14 +59,14 @@ async function generateAlert(address, title, content) {
                     alertInsertionCalls.push(mongoLib.createDoc(alertModels[alertTypeEnum.PUSH], {
                         address: address.toLowerCase(),
                         title: title,
-                        body: content
+                        body: body
                     }));
                     break;
                 case alertTypeEnum.SLACK:
                     alertInsertionCalls.push(mongoLib.createDoc(alertModels[alertTypeEnum.SLACK], {
                         address: address.toLowerCase(),
                         title: title,
-                        body: content,
+                        body: body,
                         webhook: user.slackWebhook
                     }));
                     break;
@@ -67,7 +74,7 @@ async function generateAlert(address, title, content) {
                     alertInsertionCalls.push(mongoLib.createDoc(alertModels[alertTypeEnum.DISCORD], {
                         address: address.toLowerCase(),
                         title: title,
-                        body: content,
+                        body: body,
                         webhook: user.discordWebhook
                     }));
                     break;
@@ -75,7 +82,7 @@ async function generateAlert(address, title, content) {
                     alertInsertionCalls.push(mongoLib.createDoc(alertModels[alertTypeEnum.EMAIL], {
                         address: address.toLowerCase(),
                         subject: title,
-                        body: content,
+                        body: body,
                         email: user.email
                     }));
                     break;
