@@ -97,6 +97,33 @@
     </ul>
 </div>
 
+<div class="form-container">
+    <h3>Discord Subscription API</h3>
+    <form action="/alert/discord/subscribe" method="post">
+        <label for="webhook-discord">webhook:</label>
+        <input type="text" id="webhook-discord" name="webhook">
+        <input type="submit" value="Subscribe">
+    </form>
+</div>
+
+<div class="form-container">
+    <h3>Email Subscription API</h3>
+    <form action="/alert/email/subscribe" method="post">
+        <label for="email-subscribe">email:</label>
+        <input type="text" id="email-subscribe" name="email">
+        <input type="submit" value="Subscribe">
+    </form>
+</div>
+
+<div class="form-container">
+    <h3>Slack Subscription API</h3>
+    <form action="/alert/slack/subscribe" method="post">
+        <label for="webhook-slack">webhook:</label>
+        <input type="text" id="webhook-slack" name="webhook">
+        <input type="submit" value="Subscribe">
+    </form>
+</div>
+
 </body>
 </html>
 
