@@ -7,6 +7,7 @@ const Onboarding = ({ open, setOpen, signer }) => {
     const [selectedProtocols, setSelectedProtocols] = useState([]);
     const [slackWebhook, setSlackWebhook] = useState('');
     const [emailAddress, setEmailAddress] = useState('');
+    const [discordWebhook, setDiscordWebhook] = useState('');
     const handleClose = () => {
         setOpen(false);
     };
@@ -35,6 +36,11 @@ const Onboarding = ({ open, setOpen, signer }) => {
         event.stopPropagation();
         setEmailAddress(event.target.value);
     };
+    const handleDiscordWebhookChange = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        setDiscordWebhook(event.target.value);
+    }
 
     const handleNext = async () => {
         if (selectedProtocols.includes('Slack') && !slackWebhook) {
@@ -43,7 +49,7 @@ const Onboarding = ({ open, setOpen, signer }) => {
         }
 
         selectedProtocols.includes('Slack') && axios.post('https://finsafe-backend.insidefi.io/alert/slack/subscribe', { webhook: slackWebhook }, { headers: { 'Content-Type': 'application/json', authorization: `Bearer ${localStorage.getItem('token')}` } });
-
+        selectedProtocols.includes('Discord') && axios.post('https://finsafe-backend.insidefi.io/alert/discord/subscribe', { webhook: discordWebhook }, { headers: { 'Content-Type': 'application/json', authorization: `Bearer ${localStorage.getItem('token')}` } });
         if (selectedProtocols.includes('Email') && !emailAddress) {
             alert('Please enter email address');
             return;
@@ -82,7 +88,7 @@ const Onboarding = ({ open, setOpen, signer }) => {
                             width: '100%',
                         }}
                     >
-                        <h2 style={{ marginBottom: '20px' }}>Select Push Protocols</h2>
+                        <h2 style={{ marginBottom: '20px' }}>Select Alert Prefrences</h2>
                         <FormGroup>
                             <FormControlLabel
                                 control={
@@ -93,7 +99,18 @@ const Onboarding = ({ open, setOpen, signer }) => {
                                         value="Alerts"
                                     />
                                 }
-                                label="Alerts"
+                                label="Push Protocol Alerts"
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        style={{ color: 'white' }}
+                                        checked={selectedProtocols.includes('Discord')}
+                                        onChange={handleProtocolChange}
+                                        value="Discord"
+                                    />
+                                }
+                                label="Discord"
                             />
                             <FormControlLabel
                                 control={
@@ -131,6 +148,19 @@ const Onboarding = ({ open, setOpen, signer }) => {
                                 />
                             </div>
                         )}
+                         {selectedProtocols.includes('Discord') && (
+                            <div>
+                                <TextField
+                                    label="Discord Webhook"
+                                    variant="outlined"
+                                    fullWidth
+                                    margin="normal"
+                                    value={discordWebhook}
+                                    onChange={(e) => handleDiscordWebhookChange(e)}
+                                />
+                            </div>
+                        )}
+
 
                         {selectedProtocols.includes('Email') && (
                             <div>
