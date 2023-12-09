@@ -153,6 +153,16 @@ async function convertEthAmountToUsd(ethAmount, web3) {
     }
 }
 
+async function convertUsdAmountToEth(usdAmount, web3) {
+    try {
+        let ethPrice = await getNativePriceFromChainlinkPriceOracle("eth", web3);
+        let ethAmount = usdAmount / ethPrice.usdPrice;
+        return ethAmount
+    } catch (error) {
+        throw error
+    }
+}
+
 async function getDecimalsForAsset(address, web3) {
     try {
         const decimalContract = new web3.eth.Contract(decimalAbi, address);
@@ -169,5 +179,6 @@ module.exports = {
     getTokenPriceFromChainlinkPriceOracle: getTokenPriceFromChainlinkPriceOracle,
     getNativePriceFromChainlinkPriceOracle: getNativePriceFromChainlinkPriceOracle,
     convertEthAmountToUsd: convertEthAmountToUsd,
-    getDecimalsForAsset: getDecimalsForAsset
+    getDecimalsForAsset: getDecimalsForAsset,
+    convertUsdAmountToEth: convertUsdAmountToEth
 }
