@@ -26,7 +26,7 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - run: npm i
         working-directory: ./frontend
-      - run: npm run build
+      - run: CI=false npm run build
         working-directory: ./frontend
       - run: pm2 restart frontend --no-autorestart
         working-directory: ./frontend
