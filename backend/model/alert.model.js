@@ -22,4 +22,6 @@ const alertSchema = new mongoose.Schema({
     timestamps: true
 })
 
+alertSchema.index({address: 1, timestamp: -1});
+
 module.exports = mongoose.connection.useDb(dbEnum.FINSAFE).model("alert", alertSchema)
