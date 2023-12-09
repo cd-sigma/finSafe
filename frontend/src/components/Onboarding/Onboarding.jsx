@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Button, Modal, FormControlLabel, Checkbox, FormGroup, Fade, TextField } from '@mui/material';
+import { PushAPI } from '@pushprotocol/restapi';
+import { CONSTANTS } from '@pushprotocol/restapi';
 import axios from 'axios';
-const Onboarding = ({ open, setOpen }) => {
+const Onboarding = ({ open, setOpen, signer }) => {
     const [selectedProtocols, setSelectedProtocols] = useState([]);
     const [slackWebhook, setSlackWebhook] = useState('');
     const [emailAddress, setEmailAddress] = useState('');
-
     const handleClose = () => {
         setOpen(false);
     };
@@ -23,39 +24,43 @@ const Onboarding = ({ open, setOpen }) => {
         }
     };
 
-   const  handleSlackWebhookChange = (event) => {
+    const handleSlackWebhookChange = (event) => {
         event.preventDefault();
-        event.stopPropagation(); 
+        event.stopPropagation();
         setSlackWebhook(event.target.value);
     };
 
     const handleEmailAddressChange = (event) => {
         event.preventDefault();
-        event.stopPropagation(); 
+        event.stopPropagation();
         setEmailAddress(event.target.value);
     };
 
-    const handleNext = () => {
+    const handleNext = async () => {
         if (selectedProtocols.includes('Slack') && !slackWebhook) {
             alert('Please enter slack webhook');
             return;
         }
 
-        selectedProtocols.includes('Slack') && axios.post('https://finsafe-backend.insidefi.io/alert/slack/subscribe', { webhook: slackWebhook }, { headers: { 'Content-Type': 'application/json' , authorization: `Bearer ${localStorage.getItem('token')}` } });
+        selectedProtocols.includes('Slack') && axios.post('https://finsafe-backend.insidefi.io/alert/slack/subscribe', { webhook: slackWebhook }, { headers: { 'Content-Type': 'application/json', authorization: `Bearer ${localStorage.getItem('token')}` } });
 
         if (selectedProtocols.includes('Email') && !emailAddress) {
             alert('Please enter email address');
             return;
         }
 
-        console.log('emailAddress', emailAddress);
+        selectedProtocols.includes('Email') && axios.post('https://finsafe-backend.insidefi.io/alert/email/subscribe', { email: emailAddress }, { headers: { 'Content-Type': 'application/json', authorization: `Bearer ${localStorage.getItem('token')}` } });
 
-        selectedProtocols.includes('Email') && axios.post('https://finsafe-backend.insidefi.io/alert/email/subscribe', { email: emailAddress }, { headers: { 'Content-Type': 'application/json' , authorization: `Bearer ${localStorage.getItem('token')}` } });
-
+        if (selectedProtocols.includes('Alerts')) {
+            const userAlice = await PushAPI.initialize(signer, { env: CONSTANTS.ENV.STAGING });
+            const response2 = await userAlice.notification.subscribe(`eip155:11155111:0x786A45A142d812DFECb0d854B23b030987eC4671`);
+            alert('Subscribed to alerts');
+        }
         handleClose();
     };
 
     return (
+
         <div>
             <Modal
                 open={open}
