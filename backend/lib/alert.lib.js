@@ -14,7 +14,6 @@ const alertModels = {
     [alertTypeEnum.EMAIL]: require("../model/email.alert.model")
 }
 const alertModel = require("../model/alert.model");
-const nonUserAlertModel = require("../model/non.user.alert.model");
 
 async function generateAlert(address, timestamp, title, body) {
     try {
@@ -27,33 +26,17 @@ async function generateAlert(address, timestamp, title, body) {
             return;
         }
 
-        let user = await mongoLib.findOneByQuery(userModel, {address: address.toLowerCase()});
-        if (validatorUtil.isEmpty(user)) {
-            await mongoLib.createDoc(nonUserAlertModel, {
-                address: address.toLowerCase(),
-                timestamp: timestamp,
-                title: title,
-                body: body
-            })
-            return;
-        }
-
-        if (validatorUtil.isEmpty(user.alertPreferences)) {
-            await mongoLib.createDoc(nonUserAlertModel, {
-                address: address.toLowerCase(),
-                timestamp: timestamp,
-                title: title,
-                body: body
-            });
-            return;
-        }
-
         await mongoLib.createDoc(alertModel, {
             address: address.toLowerCase(),
             timestamp: timestamp,
             title: title,
             body: body,
         });
+
+        let user = await mongoLib.findOneByQuery(userModel, {address: address.toLowerCase()});
+        if (validatorUtil.isEmpty(user) || validatorUtil.isEmpty(user.alertPreferences)) {
+            return;
+        }
 
         let alertInsertionCalls = [];
         for (let iterAlertPreference = 0; iterAlertPreference < user.alertPreferences.length; iterAlertPreference++) {
