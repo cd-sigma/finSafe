@@ -9,7 +9,7 @@ const tokenRoutes = require("./routes/token.route")
 const userRoutes = require("./routes/user.route")
 
 const app = express()
-const port = 3000
+const port = 3001
 
 ;(async () => {
     try {
