@@ -88,7 +88,7 @@ async function generateAlert(address, timestamp, title, body) {
 
 function isValidPushAlert(alert) {
     try {
-        if (validatorUtil.isEmpty(alert) || validatorUtil.isEmpty(alert.address) || validatorUtil.isEmpty(alert.title) || validatorUtil.isEmpty(alert.body) || validatorUtil.isEmpty(alert.timestamp)) {
+        if (validatorUtil.isEmpty(alert) || validatorUtil.isEmpty(alert.address) || validatorUtil.isEmpty(alert.title) || validatorUtil.isEmpty(alert.body) || validatorUtil.isNil(alert.timestamp)) {
             return false;
         }
         return true;
@@ -99,7 +99,7 @@ function isValidPushAlert(alert) {
 
 function isValidEmailAlert(alert) {
     try {
-        if (validatorUtil.isEmpty(alert) || validatorUtil.isEmpty(alert.email) || validatorUtil.isEmpty(alert.subject) || validatorUtil.isEmpty(alert.body) || validatorUtil.isEmpty(alert.timestamp)) {
+        if (validatorUtil.isEmpty(alert) || validatorUtil.isEmpty(alert.email) || validatorUtil.isEmpty(alert.subject) || validatorUtil.isEmpty(alert.body) || validatorUtil.isNil(alert.timestamp)) {
             return false;
         }
         return true;
@@ -110,7 +110,7 @@ function isValidEmailAlert(alert) {
 
 function isValidSlackAlert(alert) {
     try {
-        if (validatorUtil.isEmpty(alert) || validatorUtil.isEmpty(alert.title) || validatorUtil.isEmpty(alert.body) || validatorUtil.isEmpty(alert.webhook) || validatorUtil.isEmpty(alert.timestamp)) {
+        if (validatorUtil.isEmpty(alert) || validatorUtil.isEmpty(alert.title) || validatorUtil.isEmpty(alert.body) || validatorUtil.isEmpty(alert.webhook) || validatorUtil.isNil(alert.timestamp)) {
             return false;
         }
         return true;
@@ -121,7 +121,7 @@ function isValidSlackAlert(alert) {
 
 function isValidDiscordAlert(alert) {
     try {
-        if (validatorUtil.isEmpty(alert) || validatorUtil.isEmpty(alert.body) || validatorUtil.isEmpty(alert.webhook) || validatorUtil.isEmpty(alert.timestamp)) {
+        if (validatorUtil.isEmpty(alert) || validatorUtil.isEmpty(alert.body) || validatorUtil.isEmpty(alert.webhook) || validatorUtil.isNil(alert.timestamp)) {
             return false;
         }
         return true;

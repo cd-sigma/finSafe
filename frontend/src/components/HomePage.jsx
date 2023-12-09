@@ -2,10 +2,13 @@ import React, {useState} from "react";
 import Web3 from "web3";
 import ConnectWalletButton from "./ConnectWalltet/Walltet";
 import axios from "axios";
+import {useUserStore} from "../store/userStore";
 import Onboarding from "./Onboarding/Onboarding";
+
 const HomePage = () => {
   const [loading, setLoading] = useState(false);
-  const [address, setAddress] = useState("");
+  const userAddress = useUserStore((state) => state.userAddress);
+  const setUserAddress = useUserStore((state) => state.setUserAddress)
   const [open, setOpen] = useState(false);
   const onPressConnect = async () => {
     setLoading(true);
@@ -18,7 +21,7 @@ const HomePage = () => {
         });
 
         let account = Web3.utils.toChecksumAddress(accounts[0]);
-        setAddress(account);
+        setUserAddress(account);
         account = account.toLowerCase();
         // get nonce
         const nonce = await axios.get(
@@ -35,8 +38,6 @@ const HomePage = () => {
           params: [message, account],
         });
 
-        console.log(signature);
-        // send signature to backend
 
         const response = await axios.post(
           "https://finsafe-backend.insidefi.io/user/validate/signature",
@@ -45,7 +46,6 @@ const HomePage = () => {
             signature: signature,
           }
         );
-
         if (response.data.status === 200) {
           setOpen(true);
         }
@@ -56,8 +56,9 @@ const HomePage = () => {
 
     setLoading(false);
   };
+  console.log(userAddress)
 
-  const onPressLogout = () => setAddress("");
+  const onPressLogout = () => setUserAddress("");
   return (
     <div
       style={{
@@ -75,7 +76,7 @@ const HomePage = () => {
           onPressConnect={onPressConnect}
           onPressLogout={onPressLogout}
           loading={loading}
-          address={address}
+          address={userAddress}
         />
         <Onboarding open={open} setOpen={setOpen} />
     </div>
