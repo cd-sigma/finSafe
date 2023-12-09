@@ -1,12 +1,10 @@
-const uuid = require("uuid")
+const consoleLib = require("../../lib/console.lib")
 const responseLib = require("../../lib/response.lib")
 const mongoLib = require("../../lib/mongo.lib")
-const jwtAuthLib = require("../../lib/jwt.auth.lib")
 
 const validatorUtil = require("../../util/validators.util")
 const userResolver = require("../resolvers/user.resolver")
 
-const userModel = require("../../model/user.model")
 const positionModel = require("../../model/position.model")
 
 const resStatusEnum = require("../../enum/res.status.enum")
@@ -33,29 +31,25 @@ async function getUserPositions(req, res) {
 
 async function getNonce(req, res) {
     try {
-        let {address} = req.params
-
+        let {address = null} = req.params
         if (validatorUtil.isEmpty(address)) {
-            return responseLib.sendResponse(res, null, "Missing user address", resStatusEnum.VALIDATION_ERROR)
+            return responseLib.sendResponse(res, null, "Missing Parameters: address", resStatusEnum.VALIDATION_ERROR,)
         }
 
         address = address.toLowerCase()
+        let userExists = await userResolver.checkIfUserExistsWithPublicAddress(address)
 
-        let userDetails = await mongoLib.findOneByQuery(userModel, {address: address})
-
-        if (validatorUtil.isEmpty(userDetails)) {
-            let userData = {address: address}
-            userDetails = await mongoLib.createDoc(userModel, userData)
-            return responseLib.sendResponse(res, {
-                exists: Boolean(userDetails), nonce: userDetails.nonce,
-            }, null, resStatusEnum.SUCCESS,)
+        let userDetails = null
+        if (userExists) {
+            userDetails = await userResolver.getUserDetailsWithPublicAddress(address)
+        } else {
+            userDetails = await userResolver.addUserWithPublicAddress(address)
         }
-
         return responseLib.sendResponse(res, {
-            exists: Boolean(userDetails), nonce: userDetails.nonce,
+            nonce: userDetails.nonce,
         }, null, resStatusEnum.SUCCESS,)
-
     } catch (error) {
+        consoleLib.logError("some error occurred")
         return responseLib.sendResponse(res, null, error, resStatusEnum.INTERNAL_SERVER_ERROR)
     }
 }

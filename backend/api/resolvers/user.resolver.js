@@ -55,6 +55,17 @@ async function getUserDetailsWithPublicAddress(address) {
     }
 }
 
+async function addUserWithPublicAddress(address) {
+    try {
+        const userDetails = await mongoLib.createDoc(userModel, {
+            address: address,
+        })
+        return userDetails
+    } catch (error) {
+        throw error
+    }
+}
+
 function doesSignatureMatch(address, signature, message) {
     try {
         const recoveredAddress = sigUtil.recoverPersonalSignature({
@@ -132,4 +143,5 @@ module.exports = {
     updateJwtTokenOfUser: updateJwtTokenOfUser,
     isJwtTokenExpired: isJwtTokenExpired,
     generateJwtToken: generateJwtToken,
+    addUserWithPublicAddress: addUserWithPublicAddress
 }
