@@ -323,6 +323,14 @@
       "symbol": "1INCH",
       "address": "0x111111111117dc0aa78b770fa6a738034120c302",
       "decimals": 18
+    },
+    {
+      "aTokenAddress": "0xce1871f791548600cb59efbefFC9c38719142079",
+      "aTokenSymbol": "aLUSD",
+      "stableDebtTokenAddress": "0x39f010127274b2dBdB770B45e1de54d974974526",
+      "variableDebtTokenAddress": "0x411066489AB40442d6Fc215aD7c64224120D33F2",
+      "symbol": "LUSD",
+      "address": "0x5f98805A4E8be255a32880FDeC7F6728C6568bA0"
     }
   ],
   "defaultHealthFactorThreshold": 1.1
