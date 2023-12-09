@@ -14,8 +14,6 @@ export const FeedPage=({isActive}) => {
         const data=await getFeedDetails(searchId);
         setFeedData(data);
     }
-    
-    console.log(data)
     useEffect(() => {   
         getUserFeed();
     }, [isActive]);

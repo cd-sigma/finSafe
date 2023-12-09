@@ -4,13 +4,11 @@ import ConnectWalletButton from "./ConnectWalltet/Walltet";
 import axios from "axios";
 import {useUserStore} from "../store/userStore";
 import Onboarding from "./Onboarding/Onboarding";
-import { useNavigate } from 'react-router-dom';
 const HomePage = () => {
   const [loading, setLoading] = useState(false);
   const userAddress = useUserStore((state) => state.userAddress);
   const setUserAddress = useUserStore((state) => state.setUserAddress)
   const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
   
   const onPressConnect = async () => {
     setLoading(true);
@@ -52,7 +50,7 @@ const HomePage = () => {
           setOpen(true);
         }
         console.log(userAddress)
-        navigate(`/profile/${userAddress}`);
+       
     
       }
     } catch (error) {
@@ -67,25 +65,33 @@ const HomePage = () => {
  
   return (
     <div
-      style={{
-        display: "flex",
-        color: "white",
-        backgroundColor: "black",
-        flexDirection: "column",
-        alignItems: "center",
-        paddingTop: "200px",
-        height: "calc(100vh - 64px)",
-      }}
-    >
-      <h1 style={{ fontSize: "72px" }}>want to secure your assets?</h1>
-      <ConnectWalletButton
-          onPressConnect={onPressConnect}
-          onPressLogout={onPressLogout}
-          loading={loading}
-          address={userAddress}
-        />
-        <Onboarding open={open} setOpen={setOpen} />
+    style={{
+      display: "flex",
+      color: "white",
+      backgroundColor: "black",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "flex-start", // Added justifyContent to center vertically
+      paddingTop: "0px",
+      height: "calc(100vh - 64px)",
+      width: "98.6vw",
+
+    }}  
+  >
+    <div style={{ fontSize: "50px", width:"83vw", fontWeight: "bolder" ,textAlign: "center", marginBottom: "5px", marginTop:"150px", fontFamily:"Montserrat"}} className="font">
+    FinSafe: Your Guardian in Crypto Asset Management and Liquidation Prevention
     </div>
+    <p style={{ textAlign: "center", fontSize:"20px",fontWeight:"normal", width:"80vw", marginBottom:"25px", fontFamily:"Montserrat" }}>
+      Take control of your crypto assets like never before. FinSafe actively monitors and manages the health of your loans across major platforms, ensuring stability and preventing liquidation risks.
+    </p>
+    <ConnectWalletButton
+      onPressConnect={onPressConnect}
+      onPressLogout={onPressLogout}
+      loading={loading}
+      address={userAddress}
+    />
+    <Onboarding open={open} setOpen={setOpen} />
+  </div>
   );
 };
 
