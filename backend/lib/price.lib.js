@@ -2,6 +2,7 @@ const _ = require('lodash');
 
 const chainlinkPriceOracleAbi = require('../abi/chainlink.oracle.abi.json');
 const aaveV2PriceOracleAbi = require('../abi/aave.v2.price.oracle.abi.json');
+const decimalAbi = require('../abi/erc20.abi.json');
 
 const errorUtil = require('../util/error.util');
 
@@ -152,9 +153,21 @@ async function convertEthAmountToUsd(ethAmount, web3) {
     }
 }
 
+async function getDecimalsForAsset(address, web3) {
+    try {
+        const decimalContract = new web3.eth.Contract(decimalAbi, address);
+        const decimals = await decimalContract.methods.decimals().call()
+        return decimals
+
+    } catch (error) {
+        throw error
+    }
+}
+
 module.exports = {
     getPriceFromAavePriceOracle: getPriceFromAavePriceOracle,
     getTokenPriceFromChainlinkPriceOracle: getTokenPriceFromChainlinkPriceOracle,
     getNativePriceFromChainlinkPriceOracle: getNativePriceFromChainlinkPriceOracle,
-    convertEthAmountToUsd: convertEthAmountToUsd
+    convertEthAmountToUsd: convertEthAmountToUsd,
+    getDecimalsForAsset: getDecimalsForAsset
 }
