@@ -1,18 +1,20 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Web3 from "web3";
 import ConnectWalletButton from "./ConnectWalltet/Walltet";
 import axios from "axios";
 import {useUserStore} from "../store/userStore";
 import Onboarding from "./Onboarding/Onboarding";
-
+import { useNavigate } from 'react-router-dom';
 const HomePage = () => {
   const [loading, setLoading] = useState(false);
   const userAddress = useUserStore((state) => state.userAddress);
   const setUserAddress = useUserStore((state) => state.setUserAddress)
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  
   const onPressConnect = async () => {
     setLoading(true);
-
+  
     try {
       if (window?.ethereum?.isMetaMask) {
         // Desktop browser
@@ -49,16 +51,20 @@ const HomePage = () => {
         if (response.data.status === 200) {
           setOpen(true);
         }
+        console.log(userAddress)
+        navigate(`/profile/${userAddress}`);
+    
       }
     } catch (error) {
-      console.log(error);
+      
     }
 
     setLoading(false);
   };
-  console.log(userAddress)
+  
 
   const onPressLogout = () => setUserAddress("");
+ 
   return (
     <div
       style={{
