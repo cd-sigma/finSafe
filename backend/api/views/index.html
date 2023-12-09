@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>INSIDEFI INTERFACE</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .form-container {
+            background: #fff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="email"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        input[type="submit"] {
+            background: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<h1>FINSAFE</h1>
+
+<h2>USER Routes</h2>
+<div class="form-container">
+    <h3>Sign Up</h3>
+    <form action="/user/auth/signup" method="post">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email">
+        <input type="submit" value="Sign Up">
+    </form>
+</div>
+
+<div class="form-container">
+    <h3>Validate Signature</h3>
+    <form action="/user/auth/validate/signature" method="post">
+        <label for="publicAddress">Public Address:</label>
+        <input type="text" id="publicAddress" name="publicAddress">
+        <label for="signature">Signature:</label>
+        <input type="text" id="signature" name="signature">
+        <input type="submit" value="Validate Signature">
+    </form>
+</div>
+<div class="form-container">
+    <h3>Get NONCE</h3>
+    <ul>
+        <li><a href="/user/auth/nonce/0x25ddbf61904e886f7ce09b80d8b6f47b40b278c5" target="_blank">/user/auth/nonce/:publicAddress</a></li>
+    </ul>
+</div>
+
+
+<div class="form-container">
+    <h3>update profile</h3>
+    <form action="/user/auth/validate/signature" method="post">
+        <label for="file">file:</label>
+        <input type="file" id="file" name="file">
+        <label for="user address">publicAddress:</label>
+        <input type="text" id="user address" name="publicAddress">
+        <label for="twitter">twitter</label>
+        <input type="text" id="twitter" name="twitter">
+        <label for="github">github</label>
+        <input type="text" id="github" name="github">
+        <label for="user name">name</label>
+        <input type="text" id="user name" name="name">
+        <input type="submit" value="update profile">
+    </form>
+</div>
+<div class="form-container">
+    <h3>search by address</h3>
+    <ul>
+        <li><a href="search/address/0x7ef7ebc03f1c04509d478afb222f13df0040466b" target="_blank">search/address/:address</a></li>
+    </ul>
+</div>
+
+</body>
+</html>
+
+
