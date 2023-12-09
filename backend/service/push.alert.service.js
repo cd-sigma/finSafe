@@ -3,6 +3,7 @@ const util = require("util");
 
 const dpLib = require("../lib/dp.lib");
 const mongoLib = require("../lib/mongo.lib");
+const alertLib=require("../lib/alert.lib");
 const pushLib = require("../lib/push.lib");
 const consoleLib = require("../lib/console.lib");
 const helperUtil = require("../util/helper.util");
@@ -17,6 +18,7 @@ const alertTypeEnum = require("../enum/alert.type.enum");
 (async () => {
     try {
         await mongoLib.connect(process.env.MONGO_URL);
+        await pushLib.initializePush(process.env.PUSH_CHANNEL_PRIVATE_KEY);
 
         let pushAlertProcessingBatchLimit = await dpLib.getDp(dpEnum.PUSH_ALERT_PROCESSING_BATCH_LIMIT, serviceConfig.alerting.push.defaultBatchProcessingLimit);
         pushAlertProcessingBatchLimit = parseInt(pushAlertProcessingBatchLimit);
@@ -37,18 +39,18 @@ const alertTypeEnum = require("../enum/alert.type.enum");
 
             let alertSendingCalls = [];
             for (const alert of alerts) {
-                if (validatorUtil.isEmpty(alert.address)) {
-                    consoleLib.logError(`Invalid alert! address is null for alert : ${JSON.stringify(alert)}`);
+                if (!alertLib.isValidPushAlert(alert)) {
+                    consoleLib.logError(`Invalid alert! alert : ${JSON.stringify(alert)}`);
                     await mongoLib.findOneAndUpdate(pushAlertModel, {_id: alert._id}, {isFailed: true});
                     await mongoLib.createDoc(failedAlertModel, {
                         alertId: alert._id,
-                        reason: `Invalid alert! address is null for alert : ${JSON.stringify(alert)}`,
+                        reason: `Invalid alert! validation failed!`,
                         type: alertTypeEnum.PUSH
                     });
                     continue;
                 }
 
-                alertSendingCalls.push(pushLib.sendAlert(alert));
+                alertSendingCalls.push(pushLib.sendAlert(alert.address, alert.title, alert.body));
             }
             let alertSendingResults = await Promise.allSettled(alertSendingCalls);
 
