@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import Web3 from "web3";
 import ConnectWalletButton from "./ConnectWalltet/Walltet";
 import axios from "axios";
+import Onboarding from "./Onboarding/Onboarding";
 const HomePage = () => {
   const [loading, setLoading] = useState(false);
   const [address, setAddress] = useState("");
@@ -75,6 +76,7 @@ const HomePage = () => {
           loading={loading}
           address={address}
         />
+        <Onboarding />
       {/* Add more text or components as needed */}
     </div>
   );

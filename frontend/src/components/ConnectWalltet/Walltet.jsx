@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./Wallet.css";
+import { Button } from '@mui/material';
 const ConnectWalletButton = ({
     onPressLogout,
     onPressConnect,
@@ -9,21 +9,20 @@ const ConnectWalletButton = ({
     return (
       <div>
         {address && !loading ? (
-          <button onClick={onPressLogout} className={styles["connect-wallet"]} color="inherit" sx={{border:"1px solid white", fontSize:"20px"}}>
+          <Button onClick={onPressLogout} color="inherit" sx={{border:"1px solid white", fontSize:"20px"}}>
             Disconnect
-          </button>
+          </Button>
         ) : loading ? (
-          <button
+          <Button
           color="inherit" sx={{border:"1px solid white", fontSize:"20px"}}
-            className={`${styles["connect-wallet"]} ${styles["connect-button-loading"]}`}
             disabled
           >
             <div>Loading...</div>
-          </button>
+          </Button>
         ) : (
-          <button color="inherit" sx={{border:"1px solid white", fontSize:"20px"}} onClick={onPressConnect} className={styles["connect-wallet"]}>
+          <Button color="inherit" sx={{border:"1px solid white", fontSize:"20px"}} onClick={onPressConnect} >
             Connect Wallet
-          </button>
+          </Button>
         )}
       </div>
     );
