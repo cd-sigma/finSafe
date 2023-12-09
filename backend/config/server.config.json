@@ -22,5 +22,13 @@
     "cpu": 4,
     "ram": "16 GB",
     "disk": "30 GB"
+  },
+  "frontend": {
+    "ip": "20.244.32.240",
+    "name": "Azure frontend",
+    "cloud": "AZURE",
+    "cpu": 2,
+    "ram": "4 GB",
+    "disk": "30 GB"
   }
 }
