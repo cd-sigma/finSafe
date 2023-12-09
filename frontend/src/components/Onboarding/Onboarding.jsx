@@ -36,23 +36,21 @@ const Onboarding = ({ open, setOpen }) => {
     };
 
     const handleNext = () => {
-        //sendthe data to api
-        const data = {
-            slackWebhook,
-            emailAddress,
-            selectedProtocols,
-        };
         if (selectedProtocols.includes('Slack') && !slackWebhook) {
             alert('Please enter slack webhook');
             return;
         }
 
-        selectedProtocols.includes('Slack') && axios.post('https://finsafe-backend.insidefi.io/alert/email/subscribe', { slackWebhook });
+        selectedProtocols.includes('Slack') && axios.post('https://finsafe-backend.insidefi.io/alert/slack/subscribe', { webhook: slackWebhook }, { headers: { 'Content-Type': 'application/json' , authorization: `Bearer ${localStorage.getItem('token')}` } });
 
         if (selectedProtocols.includes('Email') && !emailAddress) {
             alert('Please enter email address');
             return;
         }
+
+        console.log('emailAddress', emailAddress);
+
+        selectedProtocols.includes('Email') && axios.post('https://finsafe-backend.insidefi.io/alert/email/subscribe', { email: emailAddress }, { headers: { 'Content-Type': 'application/json' , authorization: `Bearer ${localStorage.getItem('token')}` } });
 
         handleClose();
     };
@@ -123,8 +121,8 @@ const Onboarding = ({ open, setOpen }) => {
                                     variant="outlined"
                                     fullWidth
                                     margin="normal"
-                                    value={emailAddress}
-                                    onChange={(e) => handleEmailAddressChange(e)}
+                                    value={slackWebhook}
+                                    onChange={(e) => handleSlackWebhookChange(e)}
                                 />
                             </div>
                         )}
@@ -132,12 +130,12 @@ const Onboarding = ({ open, setOpen }) => {
                         {selectedProtocols.includes('Email') && (
                             <div>
                                 <TextField
-                                    label="Slack Webhook"
+                                    label="Email Address"
                                     variant="outlined"
                                     fullWidth
                                     margin="normal"
-                                    value={slackWebhook}
-                                    onChange={(e) => handleSlackWebhookChange(e)}
+                                    value={emailAddress}
+                                    onChange={(e) => handleEmailAddressChange(e)}
                                 />
 
                             </div>
