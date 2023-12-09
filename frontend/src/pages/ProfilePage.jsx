@@ -54,7 +54,7 @@ const ProfilePage = () => {
         </div>
 
         {/* Bottom Section - Tabs (Portfolio and Feed) */}
-        <div style={{ marginTop: "30px", marginLeft: "30px", marginRight: "30px" }}>
+        <div style={{ marginTop: "30px", marginLeft: "50px", marginRight: "50px" }}>
           <AppBar
             position="static"
             color="default"
