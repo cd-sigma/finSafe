@@ -16,8 +16,8 @@ export const getTokenDetails = async (token) => {
     const response = await tokenAxios.get(token);
     const { result } = response.data;
     const { data } = result;
-    const { logoURI, price } = data;
-    return { logoURI: logoURI, price: price };
+    const { logo, price } = data;
+    return { logo: logo, price: price };
   } catch (err) {
     console.log(`Error occured while fetching token details`, err);
   }
