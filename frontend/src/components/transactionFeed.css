@@ -4,14 +4,16 @@
 #main-container {
     display: flex;
     flex-direction: row;
-    width: 100vw;
+    width: 90vw;
     background-color: #ffffff;
     justify-content: flex-start;
+    align-items: center;
     color: #000000;
     padding: 10px;
     border-radius: 5px;
     border-bottom: 1px solid #333333;
-    margin :5px 0px;
+    margin: 5px 0px;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Added transition for hover effect */
 }
 
 /* Main section styling with date and address in columns */
@@ -19,7 +21,6 @@
     display: flex;
     flex-direction: column;
     flex: 0.3;
-
 }
 
 /* Styling for date and address */
@@ -31,12 +32,16 @@
 /* Description section styling */
 #description {
     flex: 0.7;
-
     padding: 8px;
 }
 
-/* Optional: Add hover effect on the main container */
+/* Hover effect on the main container */
 #main-container:hover {
-    background-color: #9d9696;
-    transition: background-color 0.3s ease;
+    background-color: #282525;
+    color: #ffffff; /* Change text color on hover */
+}
+
+/* Optional: Add a subtle box shadow on hover */
+#main-container:hover {
+    box-shadow: 0 0 10px rgba(145, 140, 140, 0.2);
 }

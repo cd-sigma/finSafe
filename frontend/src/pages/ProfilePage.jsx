@@ -14,6 +14,8 @@ import PortfolioDetails from "../components/PortfolioDetails";
 
 const ProfilePage = () => {
   const [currentTab, setCurrentTab] = React.useState(0);
+  const [isFeedReference,setisFeedReference]=React.useState(false);
+  // currentTab===1?setisFeedReference(true):setisFeedReference(false);
 
   const handleTabChange = (event, newValue) => {
     setCurrentTab(newValue);
@@ -84,7 +86,7 @@ const ProfilePage = () => {
             )}
             {currentTab === 1 && (
               <div>
-                <FeedPage/>
+                <FeedPage isActive={currentTab} />
               </div>
             )}
           </div>

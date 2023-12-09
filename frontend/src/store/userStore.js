@@ -3,6 +3,8 @@ import { devtools, persist } from "zustand/middleware";
 let userStore = (set) => ({
     userAddress:"",
     setUserAddress: (value) => set((state) => ({...state, userAddress: value})),
+    feedData:[],
+    setFeedData:(value)=>set((state)=>({...state,feedData:value})),
 });
 
 userStore = devtools(userStore);
