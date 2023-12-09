@@ -3,6 +3,7 @@ require("../node/node.env")
 const express = require("express")
 const cors = require("cors")
 
+const mongoLib = require("../lib/mongo.lib")
 const responseLib = require("../lib/response.lib")
 const tokenRoutes = require("./routes/token.route")
 const userRoutes = require("./routes/user.route")
@@ -12,6 +13,7 @@ const port = 3000
 
 ;(async () => {
     try {
+        await mongoLib.connect(process.env.MONGO_URL)
         app.use(cors())
         app.use(express.json())
         app.use(express.urlencoded({extended: true}))
