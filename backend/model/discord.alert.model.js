@@ -6,6 +6,10 @@ const discordAlertSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    timestamp: {
+        type: Number,
+        required: true
+    },
     body: {
         type: String,
         required: true

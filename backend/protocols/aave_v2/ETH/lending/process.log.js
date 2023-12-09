@@ -32,65 +32,28 @@ module.exports = async function processLog(log, web3) {
         switch (tokenType) {
             case aaveTokensTypeEnum.A_TOKEN:
                 senderTitle = "Aave V2 Collateral Transferred";
-                senderMessage = JSON.stringify({
-                    msg: `You have withdrawn ${transferredAmount} ${aaveV2Config.tokens.find((token) => token.aTokenAddress === tokenAddress).symbol}  from your Aave V2 Collateral and transferred to ${receiver}`,
-                    blockTimestamp: dateUtil.getCurrentIndianTimeForUnixTimestamp(blockTimestamp),
-                    blockNumber: log.blockNumber,
-                    transactionHash: log.transactionHash,
-                    logIndex: log.logIndex
-                });
+                senderMessage = `You have withdrawn ${transferredAmount} ${aaveV2Config.tokens.find((token) => token.aTokenAddress === tokenAddress).symbol}  from your Aave V2 Collateral and transferred to ${receiver}`
                 receiverTitle = "Aave V2 Collateral Received";
-                receiverMessage = JSON.stringify({
-                    msg: `You have received ${transferredAmount} ${aaveV2Config.tokens.find((token) => token.aTokenAddress === tokenAddress).symbol} of Aave V2 Collateral from ${sender}`,
-                    blockTimestamp: dateUtil.getCurrentIndianTimeForUnixTimestamp(blockTimestamp),
-                    blockNumber: log.blockNumber,
-                    transactionHash: log.transactionHash,
-                    logIndex: log.logIndex
-                });
+                receiverMessage = `You have received ${transferredAmount} ${aaveV2Config.tokens.find((token) => token.aTokenAddress === tokenAddress).symbol} of Aave V2 Collateral from ${sender}`
                 break;
             case aaveTokensTypeEnum.STABLE_DEBT_TOKEN:
                 senderTitle = "Aave V2 Stable Debt Transferred";
-                senderMessage = JSON.stringify({
-                    msg: `You have transferred ${transferredAmount} ${aaveV2Config.tokens.find((token) => token.stableDebtTokenAddress === tokenAddress).symbol}  of Aave V2 Stable Debt to ${receiver}`,
-                    blockTimestamp: dateUtil.getCurrentIndianTimeForUnixTimestamp(blockTimestamp),
-                    blockNumber: log.blockNumber,
-                    transactionHash: log.transactionHash,
-                    logIndex: log.logIndex
-                });
+                senderMessage = `You have transferred ${transferredAmount} ${aaveV2Config.tokens.find((token) => token.stableDebtTokenAddress === tokenAddress).symbol}  of Aave V2 Stable Debt to ${receiver}`
                 receiverTitle = "Aave V2 Stable Debt Received";
-                receiverMessage = JSON.stringify({
-                    msg: `You have received ${transferredAmount} ${aaveV2Config.tokens.find((token) => token.stableDebtTokenAddress === tokenAddress).symbol}  of Aave V2 Stable Debt from ${sender}`,
-                    blockTimestamp: dateUtil.getCurrentIndianTimeForUnixTimestamp(blockTimestamp),
-                    blockNumber: log.blockNumber,
-                    transactionHash: log.transactionHash,
-                    logIndex: log.logIndex
-                });
-
+                receiverMessage = `You have received ${transferredAmount} ${aaveV2Config.tokens.find((token) => token.stableDebtTokenAddress === tokenAddress).symbol}  of Aave V2 Stable Debt from ${sender}`
                 break;
             case aaveTokensTypeEnum.VARIABLE_DEBT_TOKEN:
                 senderTitle = "Aave V2 Variable Debt Transferred";
-                senderMessage = JSON.stringify({
-                    msg: `You have transferred ${transferredAmount} ${aaveV2Config.tokens.find((token) => token.variableDebtTokenAddress === tokenAddress).symbol}  of Aave V2 Variable Debt to ${receiver}`,
-                    blockTimestamp: dateUtil.getCurrentIndianTimeForUnixTimestamp(blockTimestamp),
-                    blockNumber: log.blockNumber,
-                    transactionHash: log.transactionHash,
-                    logIndex: log.logIndex
-                });
+                senderMessage = `You have transferred ${transferredAmount} ${aaveV2Config.tokens.find((token) => token.variableDebtTokenAddress === tokenAddress).symbol}  of Aave V2 Variable Debt to ${receiver}`
                 receiverTitle = "Aave V2 Variable Debt Received";
-                receiverMessage = JSON.stringify({
-                    msg: `You have received ${transferredAmount} ${aaveV2Config.tokens.find((token) => token.variableDebtTokenAddress === tokenAddress).symbol}  of Aave V2 Variable Debt from ${sender}`,
-                    blockTimestamp: dateUtil.getCurrentIndianTimeForUnixTimestamp(blockTimestamp),
-                    blockNumber: log.blockNumber,
-                    transactionHash: log.transactionHash,
-                    logIndex: log.logIndex
-                });
+                receiverMessage =  `You have received ${transferredAmount} ${aaveV2Config.tokens.find((token) => token.variableDebtTokenAddress === tokenAddress).symbol}  of Aave V2 Variable Debt from ${sender}`
                 break;
             default:
                 errorUtil.throwErr("Invalid token type detected");
         }
         await Promise.all([
-            alertLib.generateAlert(sender, senderTitle, senderMessage),
-            alertLib.generateAlert(receiver, receiverTitle, receiverMessage)
+            alertLib.generateAlert(sender, blockTimestamp, senderTitle, senderMessage),
+            alertLib.generateAlert(receiver, blockTimestamp, receiverTitle, receiverMessage)
         ]);
 
         let senderBalance = await tokenContract.methods.balanceOf(sender).call();
@@ -99,7 +62,6 @@ module.exports = async function processLog(log, web3) {
         receiverBalance = receiverBalance / (10 ** tokenDecimals);
 
         let dbWriteCalls = [];
-
         //--------------------------sender supplied non-zero balance update ----------------------------------
         sender !== globalConst.NULL_ADDRESS && tokenType === aaveTokensTypeEnum.A_TOKEN && senderBalance !== 0 && dbWriteCalls.push({
             updateOne: {

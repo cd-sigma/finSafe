@@ -16,7 +16,7 @@ const alertModels = {
 const alertModel = require("../model/alert.model");
 const nonUserAlertModel = require("../model/non.user.alert.model");
 
-async function generateAlert(address, title, body) {
+async function generateAlert(address, timestamp, title, body) {
     try {
         if (validatorUtil.isEmpty(address) || validatorUtil.isEmpty(body) || validatorUtil.isEmpty(title)) {
             errorUtil.throwErr(`Invalid address, title or body! address : ${address}, body : ${body}, title : ${title}`);
@@ -31,6 +31,7 @@ async function generateAlert(address, title, body) {
         if (validatorUtil.isEmpty(user)) {
             await mongoLib.createDoc(nonUserAlertModel, {
                 address: address.toLowerCase(),
+                timestamp: timestamp,
                 title: title,
                 body: body
             })
@@ -40,6 +41,7 @@ async function generateAlert(address, title, body) {
         if (validatorUtil.isEmpty(user.alertPreferences)) {
             await mongoLib.createDoc(nonUserAlertModel, {
                 address: address.toLowerCase(),
+                timestamp: timestamp,
                 title: title,
                 body: body
             });
@@ -48,6 +50,7 @@ async function generateAlert(address, title, body) {
 
         await mongoLib.createDoc(alertModel, {
             address: address.toLowerCase(),
+            timestamp: timestamp,
             title: title,
             body: body,
         });
@@ -58,6 +61,7 @@ async function generateAlert(address, title, body) {
                 case alertTypeEnum.PUSH:
                     alertInsertionCalls.push(mongoLib.createDoc(alertModels[alertTypeEnum.PUSH], {
                         address: address.toLowerCase(),
+                        timestamp: timestamp,
                         title: title,
                         body: body
                     }));
@@ -65,6 +69,7 @@ async function generateAlert(address, title, body) {
                 case alertTypeEnum.SLACK:
                     alertInsertionCalls.push(mongoLib.createDoc(alertModels[alertTypeEnum.SLACK], {
                         address: address.toLowerCase(),
+                        timestamp: timestamp,
                         title: title,
                         body: body,
                         webhook: user.slackWebhook
@@ -73,6 +78,7 @@ async function generateAlert(address, title, body) {
                 case alertTypeEnum.DISCORD:
                     alertInsertionCalls.push(mongoLib.createDoc(alertModels[alertTypeEnum.DISCORD], {
                         address: address.toLowerCase(),
+                        timestamp: timestamp,
                         title: title,
                         body: body,
                         webhook: user.discordWebhook
@@ -81,6 +87,7 @@ async function generateAlert(address, title, body) {
                 case alertTypeEnum.EMAIL:
                     alertInsertionCalls.push(mongoLib.createDoc(alertModels[alertTypeEnum.EMAIL], {
                         address: address.toLowerCase(),
+                        timestamp: timestamp,
                         subject: title,
                         body: body,
                         email: user.email
@@ -98,7 +105,7 @@ async function generateAlert(address, title, body) {
 
 function isValidPushAlert(alert) {
     try {
-        if (validatorUtil.isEmpty(alert) || validatorUtil.isEmpty(alert.address) || validatorUtil.isEmpty(alert.title) || validatorUtil.isEmpty(alert.body)) {
+        if (validatorUtil.isEmpty(alert) || validatorUtil.isEmpty(alert.address) || validatorUtil.isEmpty(alert.title) || validatorUtil.isEmpty(alert.body) || validatorUtil.isEmpty(alert.timestamp)) {
             return false;
         }
         return true;
@@ -109,7 +116,7 @@ function isValidPushAlert(alert) {
 
 function isValidEmailAlert(alert) {
     try {
-        if (validatorUtil.isEmpty(alert) || validatorUtil.isEmpty(alert.email) || validatorUtil.isEmpty(alert.subject) || validatorUtil.isEmpty(alert.body)) {
+        if (validatorUtil.isEmpty(alert) || validatorUtil.isEmpty(alert.email) || validatorUtil.isEmpty(alert.subject) || validatorUtil.isEmpty(alert.body) || validatorUtil.isEmpty(alert.timestamp)) {
             return false;
         }
         return true;
@@ -120,7 +127,7 @@ function isValidEmailAlert(alert) {
 
 function isValidSlackAlert(alert) {
     try {
-        if (validatorUtil.isEmpty(alert) || validatorUtil.isEmpty(alert.title) || validatorUtil.isEmpty(alert.body) || validatorUtil.isEmpty(alert.webhook)) {
+        if (validatorUtil.isEmpty(alert) || validatorUtil.isEmpty(alert.title) || validatorUtil.isEmpty(alert.body) || validatorUtil.isEmpty(alert.webhook) || validatorUtil.isEmpty(alert.timestamp)) {
             return false;
         }
         return true;
@@ -131,7 +138,7 @@ function isValidSlackAlert(alert) {
 
 function isValidDiscordAlert(alert) {
     try {
-        if (validatorUtil.isEmpty(alert) || validatorUtil.isEmpty(alert.body) || validatorUtil.isEmpty(alert.webhook)) {
+        if (validatorUtil.isEmpty(alert) || validatorUtil.isEmpty(alert.body) || validatorUtil.isEmpty(alert.webhook) || validatorUtil.isEmpty(alert.timestamp)) {
             return false;
         }
         return true;
