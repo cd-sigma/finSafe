@@ -19,9 +19,10 @@ jobs:
         with:
           ref: live
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
+          cache-dependency-path: backend/package-lock.json
       - run: npm i
       - run: pm2 restart api
