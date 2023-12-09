@@ -1,28 +1,32 @@
 import React from "react";
-import { Button } from '@mui/material';
+
 const ConnectWalletButton = ({
     onPressLogout,
     onPressConnect,
     loading,
-    address,
+    address,Montserrat
   }) => {
     return (
       <div>
         {address && !loading ? (
-          <Button onClick={onPressLogout} color="inherit" sx={{border:"1px solid white", fontSize:"20px"}}>
+          <div onClick={onPressLogout} style={{border:"1px solid white", fontSize:"30px",fontFamily:"Bebas neue",marginTop:"10px",borderRadius:"30px" , padding:"12px 20px",background:"white" , color:"black",
+         }}>
             Disconnect
-          </Button>
+          </div>
         ) : loading ? (
-          <Button
-          color="inherit" sx={{border:"1px solid white", fontSize:"20px"}}
+          <div
+          style={{border:"1px solid white", fontSize:"30px",fontFamily:"Bebas neue",marginTop:"10px",borderRadius:"30px" , padding:"12px 20px",background:"white" , color:"black",ml: 1,
+          }}
             disabled
           >
-            <div>Loading...</div>
-          </Button>
+            <div style={{border:"1px solid white", fontSize:"30px",fontFamily:"Bebas neue",marginTop:"10px",borderRadius:"30px" , padding:"12px 20px",background:"white" , color:"black",
+          }}>Loading...</div>
+          </div>
         ) : (
-          <Button color="inherit" sx={{border:"1px solid white", fontSize:"20px"}} onClick={onPressConnect} >
+          <div  style={{border:"1px solid white", fontSize:"30px",fontFamily:"Bebas neue",marginTop:"10px",borderRadius:"30px" , padding:"12px 20px",background:"white" , color:"black",
+          }}  onClick={onPressConnect} >
             Connect Wallet
-          </Button>
+          </div>
         )}
       </div>
     );

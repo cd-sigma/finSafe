@@ -9,13 +9,12 @@ export const FeedPage=({isActive}) => {
     const data=useUserStore((state) => state.feedData);
     const setFeedData=useUserStore((state) => state.setFeedData);
     const userAddress='0x464c71f6c2f760dda6093dcb91c24c39e5d6e18c'
+    const searchId=window.location.pathname.split('/')[2];
     const getUserFeed=async () => {
-        const data=await getFeedDetails(userAddress);
+        const data=await getFeedDetails(searchId);
         setFeedData(data);
     }
-
-    console.log(data)
-    useEffect(() => {
+    useEffect(() => {   
         getUserFeed();
     }, [isActive]);
 
