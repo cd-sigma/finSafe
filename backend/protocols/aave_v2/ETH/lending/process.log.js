@@ -2,6 +2,9 @@ const _ = require("lodash");
 const groupConfig = require("./config.json");
 
 const erc20Abi = require("../../../../abi/erc20.abi.json");
+const dateUtil = require("../../../../util/date.util");
+const alertLib = require("../../../../lib/alert.lib");
+const errorUtil = require("../../../../util/error.util");
 const globalConst = require("../../../../global.const");
 const helperUtil = require("../../../../util/helper.util");
 const aaveTokensTypeEnum = require("../../../../enum/aave.tokens.type.enum");
@@ -11,16 +14,84 @@ const aTokens = aaveV2Config.tokens.map((token) => token.aTokenAddress);
 const stableDebtTokens = aaveV2Config.tokens.map((token) => token.stableDebtTokenAddress);
 const variableDebtTokens = aaveV2Config.tokens.map((token) => token.variableDebtTokenAddress);
 
-
 module.exports = async function processLog(log, web3) {
     try {
         let sender = helperUtil.removeLeadingZeroes(log.topics[1]).toLowerCase();
         let receiver = helperUtil.removeLeadingZeroes(log.topics[2]).toLowerCase();
+        let transferredAmount = parseInt(log.data);
 
         let tokenAddress = log.address.toLowerCase()
         let tokenType = aTokens.includes(tokenAddress) ? aaveTokensTypeEnum.A_TOKEN : stableDebtTokens.includes(tokenAddress) ? aaveTokensTypeEnum.STABLE_DEBT_TOKEN : variableDebtTokens.includes(tokenAddress) ? aaveTokensTypeEnum.VARIABLE_DEBT_TOKEN : "unknown";
         let tokenContract = new web3.eth.Contract(erc20Abi, tokenAddress);
         let tokenDecimals = await tokenContract.methods.decimals().call();
+        let block = await web3.eth.getBlock(log.blockNumber);
+        let blockTimestamp = block.timestamp * 1000;
+        transferredAmount = transferredAmount / (10 ** tokenDecimals);
+
+        let senderMessage = null, senderTitle = null, receiverMessage = null, receiverTitle = null;
+        switch (tokenType) {
+            case aaveTokensTypeEnum.A_TOKEN:
+                senderTitle = "Aave V2 Collateral Transferred";
+                senderMessage = JSON.stringify({
+                    msg: `You have withdrawn ${transferredAmount} ${aaveV2Config.tokens.find((token) => token.aTokenAddress === tokenAddress).symbol}  from your Aave V2 Collateral and transferred to ${receiver}`,
+                    blockTimestamp: dateUtil.getCurrentIndianTimeForUnixTimestamp(blockTimestamp),
+                    blockNumber: log.blockNumber,
+                    transactionHash: log.transactionHash,
+                    logIndex: log.logIndex
+                });
+                receiverTitle = "Aave V2 Collateral Received";
+                receiverMessage = JSON.stringify({
+                    msg: `You have received ${transferredAmount} ${aaveV2Config.tokens.find((token) => token.aTokenAddress === tokenAddress).symbol} of Aave V2 Collateral from ${sender}`,
+                    blockTimestamp: dateUtil.getCurrentIndianTimeForUnixTimestamp(blockTimestamp),
+                    blockNumber: log.blockNumber,
+                    transactionHash: log.transactionHash,
+                    logIndex: log.logIndex
+                });
+                break;
+            case aaveTokensTypeEnum.STABLE_DEBT_TOKEN:
+                senderTitle = "Aave V2 Stable Debt Transferred";
+                senderMessage = JSON.stringify({
+                    msg: `You have transferred ${transferredAmount} ${aaveV2Config.tokens.find((token) => token.stableDebtTokenAddress === tokenAddress).symbol}  of Aave V2 Stable Debt to ${receiver}`,
+                    blockTimestamp: dateUtil.getCurrentIndianTimeForUnixTimestamp(blockTimestamp),
+                    blockNumber: log.blockNumber,
+                    transactionHash: log.transactionHash,
+                    logIndex: log.logIndex
+                });
+                receiverTitle = "Aave V2 Stable Debt Received";
+                receiverMessage = JSON.stringify({
+                    msg: `You have received ${transferredAmount} ${aaveV2Config.tokens.find((token) => token.stableDebtTokenAddress === tokenAddress).symbol}  of Aave V2 Stable Debt from ${sender}`,
+                    blockTimestamp: dateUtil.getCurrentIndianTimeForUnixTimestamp(blockTimestamp),
+                    blockNumber: log.blockNumber,
+                    transactionHash: log.transactionHash,
+                    logIndex: log.logIndex
+                });
+
+                break;
+            case aaveTokensTypeEnum.VARIABLE_DEBT_TOKEN:
+                senderTitle = "Aave V2 Variable Debt Transferred";
+                senderMessage = JSON.stringify({
+                    msg: `You have transferred ${transferredAmount} ${aaveV2Config.tokens.find((token) => token.variableDebtTokenAddress === tokenAddress).symbol}  of Aave V2 Variable Debt to ${receiver}`,
+                    blockTimestamp: dateUtil.getCurrentIndianTimeForUnixTimestamp(blockTimestamp),
+                    blockNumber: log.blockNumber,
+                    transactionHash: log.transactionHash,
+                    logIndex: log.logIndex
+                });
+                receiverTitle = "Aave V2 Variable Debt Received";
+                receiverMessage = JSON.stringify({
+                    msg: `You have received ${transferredAmount} ${aaveV2Config.tokens.find((token) => token.variableDebtTokenAddress === tokenAddress).symbol}  of Aave V2 Variable Debt from ${sender}`,
+                    blockTimestamp: dateUtil.getCurrentIndianTimeForUnixTimestamp(blockTimestamp),
+                    blockNumber: log.blockNumber,
+                    transactionHash: log.transactionHash,
+                    logIndex: log.logIndex
+                });
+                break;
+            default:
+                errorUtil.throwErr("Invalid token type detected");
+        }
+        await Promise.all([
+            alertLib.generateAlert(sender, senderTitle, senderMessage),
+            alertLib.generateAlert(receiver, receiverTitle, receiverMessage)
+        ]);
 
         let senderBalance = await tokenContract.methods.balanceOf(sender).call();
         let receiverBalance = await tokenContract.methods.balanceOf(receiver).call();
