@@ -1,15 +1,16 @@
 import "./App.css";
+import { Route, Routes } from "react-router-dom";
 
-// Components
-import Navbar from "./components/Navbar";
-import HomePage from "./components/HomePage";
+// Pages
+import LandingPage from "./pages/LandingPage";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   return (
-    <div className="App">
-      <Navbar />
-      <HomePage />
-    </div>
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/profile" element={<ProfilePage />} />
+    </Routes>
   );
 }
 

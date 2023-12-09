@@ -1,23 +1,22 @@
-import React from 'react';
+import React from "react";
+import { Button } from '@mui/material';
 
 const HomePage = () => {
   return (
-    <div style={{ display: 'flex', height: 'calc(100vh - 64px)'}}>
-      {/* Left Section */}
-      <div style={{ flex: 1, backgroundColor: 'black', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
-        <div>
-          <h2>Left Section</h2>
-          <p>This is the left content.</p>
-        </div>
-      </div>
-
-      {/* Right Section */}
-      <div style={{ flex: 1, backgroundColor: 'black', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
-        <div>
-          <h2>Right Section</h2>
-          <p>This is the right content.</p>
-        </div>
-      </div>
+    <div
+      style={{
+        display: "flex",
+        color: "white",
+        backgroundColor: "black",
+        flexDirection: "column",
+        alignItems: "center",
+        paddingTop: "200px",
+        height: "calc(100vh - 64px)",
+      }}
+    >
+      <h1 style={{ fontSize: "72px" }}>want to secure your assets?</h1>
+      <Button color="inherit" sx={{border:"1px solid white", fontSize:"20px"}}>Connect Wallet</Button>
+      {/* Add more text or components as needed */}
     </div>
   );
 };
