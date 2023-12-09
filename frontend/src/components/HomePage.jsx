@@ -6,7 +6,7 @@ import Onboarding from "./Onboarding/Onboarding";
 const HomePage = () => {
   const [loading, setLoading] = useState(false);
   const [address, setAddress] = useState("");
-
+  const [open, setOpen] = useState(false);
   const onPressConnect = async () => {
     setLoading(true);
 
@@ -22,7 +22,7 @@ const HomePage = () => {
         account = account.toLowerCase();
         // get nonce
         const nonce = await axios.get(
-          `http://localhost:3001/user/nonce/${account}`
+          `https://finsafe-backend.insidefi.io/user/nonce/${account}`
           );
 
           console.log("nonce", nonce.data.result.data.nonce);
@@ -39,14 +39,16 @@ const HomePage = () => {
         // send signature to backend
 
         const response = await axios.post(
-          "http://localhost:3001/user/validate/signature",
+          "https://finsafe-backend.insidefi.io/user/validate/signature",
           {
             address: account,
             signature: signature,
           }
         );
 
-        console.log(response);
+        if (response.data.status === 200) {
+          setOpen(true);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -69,15 +71,13 @@ const HomePage = () => {
       }}
     >
       <h1 style={{ fontSize: "72px" }}>want to secure your assets?</h1>
-      {/* <Button color="inherit" sx={{border:"1px solid white", fontSize:"20px"}}>Connect Wallet</Button> */}
       <ConnectWalletButton
           onPressConnect={onPressConnect}
           onPressLogout={onPressLogout}
           loading={loading}
           address={address}
         />
-        <Onboarding />
-      {/* Add more text or components as needed */}
+        <Onboarding open={open} setOpen={setOpen} />
     </div>
   );
 };
