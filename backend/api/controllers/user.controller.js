@@ -67,21 +67,28 @@ async function validateSignature(req, res) {
             return responseLib.sendResponse(res, null, "Missing user address or signature", resStatusEnum.VALIDATION_ERROR)
         }
         address = address.toLowerCase()
-        const userDetails = await mongoLib.findOneByQuery(userModel, {address: address})
-        if (validatorUtil.isEmpty(userDetails) || validatorUtil.isEmpty(userDetails.nonce) || validatorUtil.isEmpty(userDetails.address)) {
+        const userExists = await userResolver.checkIfUserExistsWithPublicAddress(address)
+
+        if (!userExists) {
             return responseLib.sendResponse(res, null, "User not found", resStatusEnum.NOT_FOUND)
         }
 
-        const msgBufferHex = await userResolver.constructMessage(userDetails)
-        const isVerified = await userResolver.isSignatureMatched(address, signature, msgBufferHex)
-        if (validatorUtil.isFalsy(isVerified)) {
-            return responseLib.sendResponse(res, null, `signature verification failed`, resStatusEnum.UNAUTHORIZED,)
+        const userDetails = await userResolver.getUserDetailsWithPublicAddress(address)
+        const message = userResolver.constructMessage(userDetails)
+        const didSignatureMatch = await userResolver.doesSignatureMatch(address, signature, message)
+        if (!didSignatureMatch) {
+            return responseLib.sendResponse(res, null, `Signature Verification Failed`, resStatusEnum.UNAUTHORIZED,)
+        }
+        await userResolver.updateNonceOfUser(userDetails._id)
+        await userResolver.markUserWalletVerified(userDetails._id)
+
+        let token = await userResolver.getJwtTokenFromDbForUser(userDetails._id)
+        if (validatorUtil.isNil(token) || (await userResolver.isJwtTokenExpired(token))) {
+            token = await userResolver.generateJwtToken(userDetails._id)
+            await userResolver.updateJwtTokenOfUser(userDetails._id, token)
         }
 
-        const token = jwtAuthLib.generateJwtToken(userDetails, address)
-        const newNonce = uuid.v4()
-        await mongoLib.findOneAndUpdate(userModel, {address: address}, {nonce: newNonce},)
-        return responseLib.sendResponse(res, {token: token}, null, resStatusEnum.SUCCESS)
+        return responseLib.sendResponse(res, {token: token}, null, resStatusEnum.SUCCESS,)
 
     } catch (error) {
         return responseLib.sendResponse(res, null, error, resStatusEnum.INTERNAL_SERVER_ERROR)
