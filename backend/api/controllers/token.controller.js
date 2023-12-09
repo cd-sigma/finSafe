@@ -6,7 +6,9 @@ const priceLib = require("../../lib/price.lib")
 const responseLib = require("../../lib/response.lib")
 const validatorsUtil = require("../../util/validators.util")
 const resStatusEnum = require("../../enum/res.status.enum")
-
+const tokenLogoModel = require("../../model/token.logo.model");
+const { mongo } = require("mongoose");
+const mongoLib = require("../../lib/mongo.lib");
 async function getTokenInfo(req, res) {
     try {
         let web3 = await web3Lib.getWebSocketWeb3Instance(process.env.ETH_NODE_WS_URL);
@@ -16,23 +18,28 @@ async function getTokenInfo(req, res) {
             return responseLib.sendResponse(res, null, "Missing token Address", resStatusEnum.VALIDATION_ERROR)
         }
         tokenAddress = tokenAddress.toLowerCase()
-        const url = `https://api.1inch.dev/token/v1.2/1/custom/${tokenAddress}`;
+        const tokenPrice = await priceLib.getTokenPriceFromChainlinkPriceOracle("eth", tokenAddress, web3)
+        const logoExist = await mongoLib.findOneByQuery(tokenLogoModel, {address : tokenAddress} )
 
+        if(validatorsUtil.isNotEmpty(logoExist)){
+            return responseLib.sendResponse(res,{ logo: logoExist.logo, price: tokenPrice.usdPrice } , null ,resStatusEnum.SUCCESS)
+        }
+       
+        const url = `https://api.1inch.dev/token/v1.2/1/custom/${tokenAddress}`;
         const config = {
             headers: {
                 "Authorization": `Bearer ${apiKeyConfig["1inch"]}`
             }, params: {}
         };
-
         const response = await axios.get(url, config);
+
         if (validatorsUtil.isEmpty(response) || validatorsUtil.isEmpty(response.data)) {
             return responseLib.sendResponse(res, null, "token not available", resStatusEnum.INTERNAL_SERVER_ERROR)
         }
-
-        const tokenPrice = await priceLib.getTokenPriceFromChainlinkPriceOracle("eth", tokenAddress, web3)
-        response.data.price = tokenPrice.usdPrice
-        return responseLib.sendResponse(res, response.data, null, resStatusEnum.SUCCESS)
-
+        
+        await mongoLib.findOneAndUpdate(tokenLogoModel , { address : response.data.address.toLowerCase() } , {logo :response.data.logoURI } ,{upsert : true})
+        return responseLib.sendResponse(res, { logo : response.data.logoURI , price : tokenPrice.usdPrice }, null, resStatusEnum.SUCCESS)
+        
     } catch (error) {
         return responseLib.sendResponse(res, null, error, resStatusEnum.INTERNAL_SERVER_ERROR)
     }
