@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>INSIDEFI INTERFACE</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .form-container {
+            background: #fff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="email"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        input[type="submit"] {
+            background: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<h1>FINSAFE</h1>
+
+<h2>USER Routes</h2>
+<div class="form-container">
+    <h3>Sign Up</h3>
+    <form action="/user/auth/signup" method="post">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email">
+        <input type="submit" value="Sign Up">
+    </form>
+</div>
+
+<div class="form-container">
+    <h3>Validate Signature</h3>
+    <form action="/user/auth/validate/signature" method="post">
+        <label for="publicAddress">Public Address:</label>
+        <input type="text" id="publicAddress" name="publicAddress">
+        <label for="signature">Signature:</label>
+        <input type="text" id="signature" name="signature">
+        <input type="submit" value="Validate Signature">
+    </form>
+</div>
+<div class="form-container">
+    <h3>Get NONCE</h3>
+    <ul>
+        <li><a href="/user/nonce/0x25ddbf61904e886f7ce09b80d8b6f47b40b278c5" target="_blank">/user/nonce/0x25ddbf61904e886f7ce09b80d8b6f47b40b278c5</a></li>
+    </ul>
+</div>
+
+<div class="form-container">
+    <h3>Token info</h3>
+    <ul>
+        <li><a href="token/0xdAC17F958D2ee523a2206206994597C13D831ec7" target="_blank">token/0xdAC17F958D2ee523a2206206994597C13D831ec7</a></li>
+    </ul>
+</div>
+
+<div class="form-container">
+    <h3>user position</h3>
+    <ul>
+        <li><a href="user/0x464c71f6c2f760dda6093dcb91c24c39e5d6e18c" target="_blank">user/0x464c71f6c2f760dda6093dcb91c24c39e5d6e18c</a></li>
+    </ul>
+</div>
+
+</body>
+</html>
+
+

@@ -24,7 +24,6 @@ async function getUserPositions(req, res) {
         if (validatorUtil.isEmpty(userPosition)) {
             return responseLib.sendResponse(res, null, "No positions found", resStatusEnum.NOT_FOUND)
         }
-
         return responseLib.sendResponse(res, userPosition, null, resStatusEnum.SUCCESS)
 
     } catch (error) {
