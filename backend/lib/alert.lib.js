@@ -13,10 +13,10 @@ const alertModels = {
     [alertTypeEnum.EMAIL]: require("../model/email.alert.model")
 }
 
-async function generateAlert(address, content) {
+async function generateAlert(address, title, content) {
     try {
-        if (validatorUtil.isEmpty(address) || validatorUtil.isEmpty(content)) {
-            errorUtil.throwErr(`Invalid address or content! address : ${address}, content : ${content}`);
+        if (validatorUtil.isEmpty(address) || validatorUtil.isEmpty(content) || validatorUtil.isEmpty(title)) {
+            errorUtil.throwErr(`Invalid address, title or content! address : ${address}, content : ${content}, title : ${title}`);
         }
 
         let user = await mongoLib.findOneByQuery(userModel, {address: address.toLowerCase()});
@@ -36,12 +36,14 @@ async function generateAlert(address, content) {
                 case alertTypeEnum.PUSH:
                     alertInsertionCalls.push(mongoLib.createDoc(alertModels[alertTypeEnum.PUSH], {
                         address: address.toLowerCase(),
-                        content: content
+                        title: title,
+                        body: content
                     }));
                     break;
                 case alertTypeEnum.SLACK:
                     alertInsertionCalls.push(mongoLib.createDoc(alertModels[alertTypeEnum.SLACK], {
                         address: address.toLowerCase(),
+                        title: title,
                         content: content,
                         webhook: user.slackWebhook
                     }));
@@ -49,6 +51,7 @@ async function generateAlert(address, content) {
                 case alertTypeEnum.DISCORD:
                     alertInsertionCalls.push(mongoLib.createDoc(alertModels[alertTypeEnum.DISCORD], {
                         address: address.toLowerCase(),
+                        title: title,
                         content: content,
                         webhook: user.discordWebhook
                     }));
@@ -56,7 +59,8 @@ async function generateAlert(address, content) {
                 case alertTypeEnum.EMAIL:
                     alertInsertionCalls.push(mongoLib.createDoc(alertModels[alertTypeEnum.EMAIL], {
                         address: address.toLowerCase(),
-                        content: content,
+                        subject: title,
+                        body: content,
                         email: user.email
                     }));
                     break;
@@ -70,19 +74,55 @@ async function generateAlert(address, content) {
     }
 }
 
-function validateEmailOptions(options = {}) {
-  if (
-    validatorUtil.isEmpty(options) ||
-    validatorUtil.isEmpty(options.receiverEmail) ||
-    validatorUtil.isEmpty(options.subject) ||
-    validatorUtil.isEmpty(options.text)
-  ) {
-    errorUtil.throwErr("validation error for email type notifications");
-  }
+function isValidPushAlert(alert) {
+    try {
+        if (validatorUtil.isEmpty(alert) || validatorUtil.isEmpty(alert.address) || validatorUtil.isEmpty(alert.title) || validatorUtil.isEmpty(alert.body)) {
+            return false;
+        }
+        return true;
+    } catch (error) {
+        throw error;
+    }
+}
+
+function isValidEmailAlert(alert) {
+    try {
+        if (validatorUtil.isEmpty(alert) || validatorUtil.isEmpty(alert.email) || validatorUtil.isEmpty(alert.subject) || validatorUtil.isEmpty(alert.body)) {
+            return false;
+        }
+        return true;
+    } catch (error) {
+        throw error;
+    }
+}
+
+function isValidSlackAlert(alert) {
+    try {
+        if (validatorUtil.isEmpty(alert) || validatorUtil.isEmpty(alert.title) || validatorUtil.isEmpty(alert.body) || validatorUtil.isEmpty(alert.webhook)) {
+            return false;
+        }
+        return true;
+    } catch (error) {
+        throw error;
+    }
+}
+
+function isValidDiscordAlert(alert) {
+    try {
+        if (validatorUtil.isEmpty(alert) || validatorUtil.isEmpty(alert.body) || validatorUtil.isEmpty(alert.webhook)) {
+            return false;
+        }
+        return true;
+    } catch (error) {
+        throw error;
+    }
 }
 
 
 module.exports = {
-  generateAlert: generateAlert,
-  validateEmailOptions: validateEmailOptions,
+    generateAlert: generateAlert,
+    isValidPushAlert: isValidPushAlert,
+    isValidEmailAlert: isValidEmailAlert,
+    isValidSlackAlert: isValidSlackAlert,
+    isValidDiscordAlert: isValidDiscordAlert
 };

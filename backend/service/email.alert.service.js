@@ -1,8 +1,9 @@
 require("../node/node.env");
 const util = require("util");
 
-const mongoLib = require("../lib/mongo.lib");
 const dpLib = require("../lib/dp.lib");
+const mongoLib = require("../lib/mongo.lib");
+const alertLib = require("../lib/alert.lib");
 const emailLib = require("../lib/email.lib");
 const consoleLib = require("../lib/console.lib");
 const helperUtil = require("../util/helper.util");
@@ -37,18 +38,18 @@ const alertTypeEnum = require("../enum/alert.type.enum");
 
             let alertSendingCalls = [];
             for (const alert of alerts) {
-                if (validatorUtil.isEmpty(alert.email)) {
-                    consoleLib.logError(`Invalid alert! email is null for alert : ${JSON.stringify(alert)}`);
+                if (!alertLib.isValidEmailAlert(alert)) {
+                    consoleLib.logError(`Invalid alert! alert : ${JSON.stringify(alert)}`);
                     await mongoLib.findOneAndUpdate(emailAlertModel, {_id: alert._id}, {isFailed: true});
                     await mongoLib.createDoc(failedAlertModel, {
                         alertId: alert._id,
-                        reason: `Invalid alert! email is null for alert : ${JSON.stringify(alert)}`,
+                        reason: `Invalid alert! alert : ${JSON.stringify(alert)}`,
                         type: alertTypeEnum.EMAIL
                     });
                     continue;
                 }
 
-                alertSendingCalls.push(emailLib.sendAlert(alert));
+                alertSendingCalls.push(emailLib.sendEmail(alert.email, alert.subject, alert.body));
             }
             let alertSendingResults = await Promise.allSettled(alertSendingCalls);
 

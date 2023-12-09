@@ -6,7 +6,11 @@ const emailAlertSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    content: {
+    subject: {
+        type: String,
+        required: true
+    },
+    body: {
         type: String,
         required: true
     },

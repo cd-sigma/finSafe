@@ -3,6 +3,7 @@ const util = require("util");
 
 const dpLib = require("../lib/dp.lib");
 const mongoLib = require("../lib/mongo.lib");
+const alertLib = require("../lib/alert.lib");
 const slackLib = require("../lib/slack.lib");
 const consoleLib = require("../lib/console.lib");
 const helperUtil = require("../util/helper.util");
@@ -37,18 +38,18 @@ const alertTypeEnum = require("../enum/alert.type.enum");
 
             let alertSendingCalls = [];
             for (const alert of alerts) {
-                if (validatorUtil.isEmpty(alert.webhook)) {
-                    consoleLib.logError(`Invalid alert! webhook is null for alert : ${JSON.stringify(alert)}`);
+                if (!alertLib.isValidSlackAlert(alert)) {
+                    consoleLib.logError(`Invalid alert! alert : ${JSON.stringify(alert)}`);
                     await mongoLib.findOneAndUpdate(slackAlertModel, {_id: alert._id}, {isFailed: true});
                     await mongoLib.createDoc(failedAlertModel, {
                         alertId: alert._id,
-                        reason: `Invalid alert! webhook is null for alert : ${JSON.stringify(alert)}`,
+                        reason: `Invalid alert! alert : ${JSON.stringify(alert)}`,
                         type: alertTypeEnum.SLACK
                     });
                     continue;
                 }
 
-                alertSendingCalls.push(slackLib.sendAlert(alert));
+                alertSendingCalls.push(slackLib.sendAlert(alert.webhook, alert.title, alert.body));
             }
             let alertSendingResults = await Promise.allSettled(alertSendingCalls);
 
