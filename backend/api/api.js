@@ -8,6 +8,7 @@ const consoleLib = require("../lib/console.lib")
 const responseLib = require("../lib/response.lib")
 
 const cmtRoutes= require("./routes/cmt.route")
+const healthFactorRoutes = require("./routes/health.factor.route")
 const userRoutes = require("./routes/user.route")
 const feedRoutes = require("./routes/feed.route")
 const alertRoutes= require("./routes/alert.route")
@@ -36,6 +37,7 @@ const port = 3001
         app.use("/token", tokenRoutes)
         app.use("/feed", feedRoutes)
         app.use("/alert", alertRoutes)
+        app.use("/health/factor", healthFactorRoutes)
 
         app.listen(port, () => {
             consoleLib.logInfo(`API listening at http://localhost:${port}`)
