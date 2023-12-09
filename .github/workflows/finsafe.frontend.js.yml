@@ -23,8 +23,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
-          cache-dependency-path: frontend:wq/package-lock.json
+          cache-dependency-path: frontend/package-lock.json
       - run: cd frontend
       - run: npm i
+        working-directory: ./frontend
       - run: npm run build
+        working-directory: ./frontend
       - run: pm2 restart frontend --no-autorestart
+        working-directory: ./frontend
