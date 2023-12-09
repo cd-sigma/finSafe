@@ -1,0 +1,42 @@
+/* transactionFeed.css */
+
+/* Main container styling */
+#main-container {
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+    background-color: #ffffff;
+    justify-content: flex-start;
+    color: #000000;
+    padding: 10px;
+    border-radius: 5px;
+    border-bottom: 1px solid #333333;
+    margin :5px 0px;
+}
+
+/* Main section styling with date and address in columns */
+#main {
+    display: flex;
+    flex-direction: column;
+    flex: 0.3;
+
+}
+
+/* Styling for date and address */
+#date,
+#address {
+    padding: 8px;
+}
+
+/* Description section styling */
+#description {
+    flex: 0.7;
+
+    padding: 8px;
+}
+
+/* Optional: Add hover effect on the main container */
+#main-container:hover {
+    background-color: #9d9696;
+    transition: background-color 0.3s ease;
+}

@@ -7,6 +7,7 @@
 .protocols {
   position: relative;
   letter-spacing: -0.03em;
+  width:98.9vh;
   line-height: 65px;
   font-weight: 600;
   margin-top: -9px;
