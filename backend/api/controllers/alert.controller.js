@@ -9,7 +9,7 @@ const resStatusEnum = require("../../enum/res.status.enum");
 async function subscribeToEmail(req, res) {
     try {
         const {email} = req.body;
-        let {id: address} = req.user.payload;
+        let {address} = req.user.payload;
         address = address.toLowerCase();
 
         if (validatorUtil.isEmpty(email)) {
@@ -29,7 +29,7 @@ async function subscribeToEmail(req, res) {
 async function subscribeToSlack(req, res) {
     try {
         const {webhook} = req.body;
-        let {id: address} = req.user.payload;
+        let {address} = req.user.payload;
         address = address.toLowerCase();
 
         if (validatorUtil.isEmpty(webhook)) {
@@ -49,7 +49,7 @@ async function subscribeToSlack(req, res) {
 async function subscribeToDiscord(req, res) {
     try {
         const {webhook} = req.body;
-        let {id: address} = req.user.payload;
+        let {address} = req.user.payload;
         address = address.toLowerCase();
 
         if (validatorUtil.isEmpty(webhook)) {
