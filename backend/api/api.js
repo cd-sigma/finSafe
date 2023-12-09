@@ -6,9 +6,11 @@ const cors = require("cors")
 const mongoLib = require("../lib/mongo.lib")
 const consoleLib = require("../lib/console.lib")
 const responseLib = require("../lib/response.lib")
-const tokenRoutes = require("./routes/token.route")
+
 const userRoutes = require("./routes/user.route")
 const feedRoutes = require("./routes/feed.route")
+const alertRoutes= require("./routes/alert.route")
+const tokenRoutes = require("./routes/token.route");
 
 const app = express()
 const port = 3001
@@ -31,6 +33,7 @@ const port = 3001
         app.use("/user", userRoutes)
         app.use("/token", tokenRoutes)
         app.use("/feed", feedRoutes)
+        app.use("/alert", alertRoutes)
 
         app.listen(port, () => {
             consoleLib.logInfo(`API listening at http://localhost:${port}`)
