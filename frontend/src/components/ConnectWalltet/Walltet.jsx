@@ -19,8 +19,7 @@ const ConnectWalletButton = ({
           }}
             disabled
           >
-            <div style={{border:"1px solid white", fontSize:"30px",fontFamily:"Bebas neue",marginTop:"10px",borderRadius:"30px" , padding:"12px 20px",background:"white" , color:"black",
-          }}>Loading...</div>
+          Loading...
           </div>
         ) : (
           <div  style={{border:"1px solid white", fontSize:"30px",fontFamily:"Bebas neue",marginTop:"10px",borderRadius:"30px" , padding:"12px 20px",background:"white" , color:"black",
