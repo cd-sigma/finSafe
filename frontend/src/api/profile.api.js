@@ -1,4 +1,4 @@
-import { userAxios, tokenAxios } from "./axios.instance";
+import {userAxios, tokenAxios, feedAxios} from "./axios.instance";
 
 export const getPortfolioDetails = async (address) => {
   try {
@@ -22,3 +22,14 @@ export const getTokenDetails = async (token) => {
     console.log(`Error occured while fetching token details`, err);
   }
 };
+export const getFeedDetails = async (address) => {
+  try {
+    const response = await feedAxios.get(`${address}?limit=20`);
+    const { result } = response.data;
+    console.log(result);
+    const alert=result.data.alerts;
+    return alert;
+  } catch (err) {
+    console.log(`Error occured while fetching feed details`, err);
+  }
+}

@@ -11,4 +11,8 @@ let tokenAxios = axios.create({
     baseURL: "https://finsafe-backend.insidefi.io/token/"
 });
 
-export  { userAxios, tokenAxios };
+let feedAxios = axios.create({
+    baseURL:"https://finsafe-backend.insidefi.io/feed/"
+});
+
+export  { userAxios, tokenAxios ,feedAxios};
