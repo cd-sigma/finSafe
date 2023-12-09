@@ -1,20 +1,20 @@
 {
   "dependencies": {
-    "@pushprotocol/restapi": "^1.4.45",
-    "ethers": "^5.7.2",
-    "nodemailer": "^6.9.7",
     "@metamask/eth-sig-util": "^7.0.1",
+    "@pushprotocol/restapi": "^1.4.45",
     "axios": "^1.6.2",
+    "chalk": "^4.1.2",
     "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
     "ethereumjs-util": "^7.1.5",
+    "ethers": "^5.7.2",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "mongoose": "^8.0.3",
+    "nodemailer": "^6.9.7",
     "util": "^0.12.5",
     "uuid": "^9.0.1",
-    "web3": "^4.3.0",
-    "dotenv": "^16.3.1",
-    "chalk": "^4"
+    "web3": "^1.8.2"
   }
 }
