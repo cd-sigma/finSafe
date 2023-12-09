@@ -24,3 +24,5 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
       - run: npm i
+      - run: npm run build
+      - run: pm2 restart frontend --no-autorestart
