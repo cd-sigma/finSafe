@@ -8,7 +8,7 @@ import Logo from "../assets/finsafe-logo.png";
 
 const Navbar = () => {
   return (
-    <AppBar position="static" sx={{paddingTop:"10px", paddingLeft:"20px", paddingRight:"15px", backgroundColor:"black"}}>
+    <AppBar position="static" sx={{paddingTop:"25px", paddingLeft:"20px", paddingRight:"15px", backgroundColor:"black"}}>
       <Toolbar sx={{ justifyContent: 'space-between', background: 'black' }}>
         {/* Logo on the Left */}
         <Typography variant="h6" component="div">
