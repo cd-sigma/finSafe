@@ -1,9 +1,11 @@
 const mongoLib = require("../../lib/mongo.lib")
 
 
-
-async function calculateHealthFactor(address) {
+async function calculateHealthFactor(position) {
     try {
+        return position
+
+
 
 
     } catch (error) {

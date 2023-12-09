@@ -1,7 +1,9 @@
 const responseLib = require("../../lib/response.lib")
+const mongoLib = require("../../lib/mongo.lib")
 
 const healthFactorResolver = require("../resolvers/health.factor.resolver")
 const validatorUtil = require("../../util/validators.util")
+const positionModel = require("../../model/position.model")
 
 const resStatusEnum = require("../../enum/res.status.enum")
 
@@ -16,8 +18,13 @@ async function calculateHealthFactor(req, res) {
 
         address = address.toLowerCase()
 
+        const position = await mongoLib.findOneByQuery(positionModel, {owner: address})
 
-        const healthFactor = await healthFactorResolver.calculateHealthFactor(address)
+        if (validatorUtil.isEmpty(position)) {
+            return responseLib.sendResponse(res, null, "No position found", resStatusEnum.VALIDATION_ERROR)
+        }
+
+        const healthFactor = await healthFactorResolver.calculateHealthFactor(position)
 
         return responseLib.sendResponse(res, healthFactor, null, resStatusEnum.SUCCESS)
 
