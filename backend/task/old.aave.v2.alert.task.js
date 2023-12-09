@@ -1,3 +1,5 @@
+//WARNING: restarts not factored in, there will be some duplicate alerts in the db (fix it in future);
+
 require("../node/node.env");
 const _ = require('lodash');
 
