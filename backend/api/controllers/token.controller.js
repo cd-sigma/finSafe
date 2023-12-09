@@ -12,6 +12,7 @@ async function getTokenInfo(req, res) {
         let web3 = await web3Lib.getWebSocketWeb3Instance(process.env.ETH_NODE_WS_URL);
         let {tokenAddress} = req.params
         let tokenPrice
+        let usdPrice
 
         if (validatorsUtil.isEmpty(tokenAddress)) {
             return responseLib.sendResponse(res, null, "Missing token Address", resStatusEnum.VALIDATION_ERROR)
@@ -32,12 +33,13 @@ async function getTokenInfo(req, res) {
 
         try {
             tokenPrice = await priceLib.getTokenPriceFromChainlinkPriceOracle("eth", tokenAddress, web3)
+            response.data.price = tokenPrice.usdPrice
         } catch (error) {
             tokenPrice = await priceLib.getPriceFromAavePriceOracle([tokenAddress], web3)
-            const decimals = await priceLib.getDecimalsForAsset(tokenAddress,web3)
-            console.log(tokenPrice)
+            const decimals = await priceLib.getDecimalsForAsset(tokenAddress, web3)
+            const ethAmount = parseFloat(tokenPrice[0]) / 10 ** decimals
+            response.data.price = await priceLib.convertEthAmountToUsd(ethAmount, web3)
         }
-        response.data.price = tokenPrice.usdPrice
         return responseLib.sendResponse(res, response.data, null, resStatusEnum.SUCCESS)
 
     } catch (error) {
