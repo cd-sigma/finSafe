@@ -1,0 +1,26 @@
+name: finsafe.frontend.js
+
+on:
+  push:
+    branches: [ live ]
+    paths:
+      - '**'
+
+jobs:
+  build:
+    runs-on: [ self-hosted,finsafe-frontend ]
+
+    strategy:
+      matrix:
+        node-version: [ 16.x ]
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: live
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - run: npm i
