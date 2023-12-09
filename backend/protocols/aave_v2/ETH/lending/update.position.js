@@ -4,6 +4,7 @@ const LENDING_POOL_ADDRESS = "0x7d2768de32b0b80b7a3454c06bdac94a69ddc7a9";
 
 const dpLib = require("../../../../lib/dp.lib");
 const aaveV2Config = require("../../../../config/aave.v2.config");
+const dateUtil = require("../../../../util/date.util");
 const alertLib = require("../../../../lib/alert.lib");
 const priceLib = require("../../../../lib/price.lib");
 const dpEnum = require("../../../../enum/dp.enum");
@@ -20,10 +21,10 @@ module.exports = async function updatePosition(position, web3) {
         let aaveV2HealthFactorThreshold = await dpLib.getDp(dpEnum.AAVE_V2_HEALTH_FACTOR_THRESHOLD, aaveV2Config.defaultHealthFactorThreshold);
         aaveV2HealthFactorThreshold = parseFloat(aaveV2HealthFactorThreshold);
         if (oldHealthFactor && oldHealthFactor > aaveV2HealthFactorThreshold && healthFactor < aaveV2HealthFactorThreshold) {
-            await alertLib.generateAlert(position.owner, "Aave V2 Health Factor Threshold Crossed", `Your health factor has dropped below ${aaveV2HealthFactorThreshold} on Aave V2! Current Health Factor: ${healthFactor}`);
+            await alertLib.generateAlert(position.owner, dateUtil.getTimestampWithMS(), "Aave V2 Health Factor Threshold Crossed", `Your health factor has dropped below ${aaveV2HealthFactorThreshold} on Aave V2! Current Health Factor: ${healthFactor}`);
         }
         if (oldHealthFactor && oldHealthFactor < aaveV2HealthFactorThreshold && healthFactor > aaveV2HealthFactorThreshold) {
-            await alertLib.generateAlert(position.owner, "Aave V2 Health Factor Threshold Crossed", `Your health factor has risen above ${aaveV2HealthFactorThreshold} on Aave V2! Current Health Factor: ${healthFactor}`);
+            await alertLib.generateAlert(position.owner, dateUtil.getTimestampWithMS(), "Aave V2 Health Factor Threshold Crossed", `Your health factor has risen above ${aaveV2HealthFactorThreshold} on Aave V2! Current Health Factor: ${healthFactor}`);
         }
         position.metadata.healthFactor = healthFactor;
 
