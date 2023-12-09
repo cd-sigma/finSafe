@@ -73,13 +73,13 @@ async function validateSignature(req, res) {
         if (!didSignatureMatch) {
             return responseLib.sendResponse(res, null, `Signature Verification Failed`, resStatusEnum.UNAUTHORIZED,)
         }
-        await userResolver.updateNonceOfUser(userDetails._id)
-        await userResolver.markUserWalletVerified(userDetails._id)
+        await userResolver.updateNonceOfUser(userDetails.address)
+        await userResolver.markUserWalletVerified(userDetails.address)
 
-        let token = await userResolver.getJwtTokenFromDbForUser(userDetails._id)
+        let token = await userResolver.getJwtTokenFromDbForUser(userDetails.address)
         if (validatorUtil.isNil(token) || (await userResolver.isJwtTokenExpired(token))) {
-            token = await userResolver.generateJwtToken(userDetails._id)
-            await userResolver.updateJwtTokenOfUser(userDetails._id, token)
+            token = await userResolver.generateJwtToken(userDetails.address)
+            await userResolver.updateJwtTokenOfUser(userDetails.address, token)
         }
 
         return responseLib.sendResponse(res, {token: token}, null, resStatusEnum.SUCCESS,)

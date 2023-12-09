@@ -77,34 +77,34 @@ function doesSignatureMatch(address, signature, message) {
     }
 }
 
-async function updateNonceOfUser(userId) {
+async function updateNonceOfUser(address) {
     try {
-        await mongoLib.findOneAndUpdate(userModel, {_id: userId}, {nonce: uuid.v4()})
+        await mongoLib.findOneAndUpdate(userModel, {address: address}, {nonce: uuid.v4()})
     } catch (error) {
         throw error
     }
 }
 
-async function markUserWalletVerified(userId) {
+async function markUserWalletVerified(address) {
     try {
-        await mongoLib.findOneAndUpdate(userModel, {_id: userId}, {isWalletVerified: true})
+        await mongoLib.findOneAndUpdate(userModel, {address: address}, {isWalletVerified: true})
     } catch (error) {
         throw error
     }
 }
 
-async function getJwtTokenFromDbForUser(userId) {
+async function getJwtTokenFromDbForUser(address) {
     try {
-        let user = await mongoLib.findOneByQuery(userModel, {_id: userId})
+        let user = await mongoLib.findOneByQuery(userModel, {address: address})
         return user.jwtToken
     } catch (error) {
         throw error
     }
 }
 
-async function updateJwtTokenOfUser(userId, jwtToken) {
+async function updateJwtTokenOfUser(address, jwtToken) {
     try {
-        await mongoLib.findOneAndUpdate(userModel, {_id: userId}, {jwtToken: jwtToken})
+        await mongoLib.findOneAndUpdate(userModel, {address: address}, {jwtToken: jwtToken})
     } catch (error) {
         throw error
     }
@@ -119,10 +119,10 @@ async function isJwtTokenExpired(token) {
     }
 }
 
-async function generateJwtToken(userId) {
+async function generateJwtToken(address) {
     try {
         let jwtTokenExpirationTime = "60d"
-        return jwt.sign({payload: {id: userId}}, process.env.JWT_SECRET, {
+        return jwt.sign({payload: {address: address}}, process.env.JWT_SECRET, {
             expiresIn: jwtTokenExpirationTime,
         })
     } catch (error) {
