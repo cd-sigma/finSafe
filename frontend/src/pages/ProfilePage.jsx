@@ -79,7 +79,7 @@ const ProfilePage = () => {
             {currentTab === 0 && (
               <div>
                 <Typography variant="h6">
-                  <PortfolioDetails searchId={searchId}/>
+                  <PortfolioDetails searchId={searchId} isActive={currentTab}/>
                 </Typography>
               </div>
             )}
