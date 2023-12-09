@@ -1,10 +1,10 @@
 const mongoLib = require("../../lib/mongo.lib")
 const AAVE_V2_PROTOCOL_DATA_PROVIDER_ABI = require("../../abi/aave.v2.protocol.data.provider.abi.json")
 const aaveV2ProtocolDataProviderContract = "0x057835Ad21a177dbdd3090bB1CAE03EaCF78Fc6d"
+const priceLib = require("../../lib/price.lib")
 
-async function calculateHealthFactor(position, web3, usdtAmount, usdtPrice, wbtcAmount, wbtcPrice, wethAmount, wethPrice, yfiAmount, yfiPrice, zrxAmount, zrxPrice, uniAmount, uniPrice, aaveAmount, aavePrice, batAmount, batPrice, busdAmount, busdPrice, daiAmount, daiPrice, enjAmount, enjPrice, kncAmount, kncPrice, linkAmount, linkPrice, manaAmount, manaPrice, mkrAmount, mkrPrice, renAmount, renPrice, snxAmount, snxPrice, susdAmount, susdPrice, tusdAmount, tusdPrice, usdcAmount, usdcPrice, crvAmount, crvPrice, balAmount, balPrice, xsushiAmount, xsushiPrice, renfilAmount, renfilPrice, raiAmount, raiPrice, amplAmount, amplPrice, usdpAmount, usdpPrice, dpiAmount, dpiPrice, fraxAmount, fraxPrice, feiAmount, feiPrice, stethAmount, stethPrice, ensAmount, ensPrice, gusdAmount, gusdPrice, ustAmount, ustPrice, cvxAmount, cvxPrice, oneinchAmount, oneinchPrice, lusdAmount, lusdPrice) {
+async function calculateHealthFactor(position, web3, collateralAssets, collateralAmounts, collateralPrices, debtAssets, debtAmounts, debtPrices, liquidationThresholds) {
     try {
-
         const aaveV2ProtocolDataProvider = new web3.eth.Contract(AAVE_V2_PROTOCOL_DATA_PROVIDER_ABI, aaveV2ProtocolDataProviderContract)
 
         const liqudationThresholdForTusd = parseFloat((await aaveV2ProtocolDataProvider.methods.getReserveConfigurationData("0x0000000000085d4780B73119b644AE5ecd22b376").call()).liquidationThreshold) / 10000
@@ -37,7 +37,6 @@ async function calculateHealthFactor(position, web3, usdtAmount, usdtPrice, wbtc
         const liqudationThresholdForSnx = parseFloat((await aaveV2ProtocolDataProvider.methods.getReserveConfigurationData("0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f").call()).liquidationThreshold) / 10000
 
 
-
         // let supplied = position.metadata.supplied.map((supply) => {
         //     let balance = supply.balance;
         //     let liqudationThreshold = supply.liqudationThreshold;
@@ -56,6 +55,24 @@ async function calculateHealthFactor(position, web3, usdtAmount, usdtPrice, wbtc
         //
         // return suppliedSum / borrowedSum
         return 0
+
+    } catch (error) {
+        throw error
+    }
+}
+
+async function defaultHealthFactor(position, web3) {
+    try {
+        const aaveV2ProtocolDataProvider = new web3.eth.Contract(AAVE_V2_PROTOCOL_DATA_PROVIDER_ABI, aaveV2ProtocolDataProviderContract)
+
+        for (const supply of position.metadata.supplied) {
+            const underlying = supply.underlying
+            const balance = supply.balance
+            const price = supply.price
+            const ethPrice = await priceLib.getPriceFromAavePriceOracle([underlying], web3)
+            const liqudationThreshold = parseFloat((await aaveV2ProtocolDataProvider.methods.getReserveConfigurationData(underlying).call()).liquidationThreshold) / 10000
+
+        }
 
     } catch (error) {
         throw error
