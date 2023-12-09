@@ -35,9 +35,9 @@ async function getTokenInfo(req, res) {
             tokenPrice = await priceLib.getTokenPriceFromChainlinkPriceOracle("eth", tokenAddress, web3)
             response.data.price = tokenPrice.usdPrice
         } catch (error) {
-            tokenPrice = await priceLib.getPriceFromAavePriceOracle([tokenAddress], web3)
+            usdPrice = await priceLib.getPriceFromAavePriceOracle([tokenAddress], web3)
             const decimals = await priceLib.getDecimalsForAsset(tokenAddress, web3)
-            const ethAmount = parseFloat(tokenPrice[0]) / 10 ** decimals
+            const ethAmount = parseFloat(usdPrice[0]) / 10 ** decimals
             response.data.price = await priceLib.convertEthAmountToUsd(ethAmount, web3)
         }
         return responseLib.sendResponse(res, response.data, null, resStatusEnum.SUCCESS)
