@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Typography,
   Table,
   TableBody,
   TableCell,
@@ -12,28 +8,37 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useUserStore } from "../store/userStore";
 
-import { getPortfolioDetails } from "../api/profile.api";
+import { getPortfolioDetails, getTokenDetails } from "../api/profile.api";
 
 const PortfolioDetails = () => {
-  const [expanded, setExpanded] = useState(false);
   const [suppliedDetails, setSuppliedDetails] = useState([]);
   const [borrowedDetails, setBorrowedDetails] = useState([]);
-  const handleAccordionChange = () => {
-    setExpanded((prevExpanded) => !prevExpanded);
-  };
+  let userAddress = useUserStore((state) => state.userAddress);
+  userAddress = "0x464c71f6c2f760dda6093dcb91c24c39e5d6e18c";
+
   const convertSuppliedToDesiredFormat = (array) => {
     let result = [];
-    // array.map((value) => {
-    //     let obj = {};
-    //     obj.supplied = 
-    // })
+    array.map(async (value) => {
+      const { token, balance, symbol } = value;
+      // const moreDetails = await getTokenDetails(token);
+      const moreDetails = {
+        logoURI:
+          "https://tokens-data.1inch.io/images/0xdac17f958d2ee523a2206206994597c13d831ec7.png",
+        price: 1,
+      };
+      let obj = {};
+      obj.logo = moreDetails?.logoURI;
+      obj.symbol = symbol;
+      obj.balance = balance.toFixed(2);
+      obj.price = (moreDetails?.price * balance).toFixed(2);
+      result.push(obj);
+    });
+    return result;
   };
   const callApis = async () => {
-    const details = await getPortfolioDetails(
-      "0x464c71f6c2f760dda6093dcb91c24c39e5d6e18c"
-    );
+    const details = await getPortfolioDetails(userAddress);
     const { metadata } = details[0];
     const { supplied, borrowed } = metadata;
     const derivedSupplied = convertSuppliedToDesiredFormat(supplied);
@@ -45,42 +50,37 @@ const PortfolioDetails = () => {
   }, []);
   console.log(suppliedDetails);
   return (
-    <Accordion expanded={expanded} onChange={handleAccordionChange}>
-      <AccordionSummary
-        expandIcon={<ExpandMoreIcon />}
-        aria-controls="panel-content"
-        id="panel-header"
-      >
-        <Typography>Supplied</Typography>
-      </AccordionSummary>
-      <AccordionDetails>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead style={{marginBottom:"50px"}}>
+          <TableRow>
+            <TableCell>Supplied</TableCell>
+            <TableCell>Balance</TableCell>
+            <TableCell>USD Value</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {/* Add your table rows here */}
+          {suppliedDetails.map((value) => {
+            const { logo, balance, price, symbol } = value;
+            return (
               <TableRow>
-                <TableCell>Supplied</TableCell>
-                <TableCell>Balance</TableCell>
-                <TableCell>USD Value</TableCell>
+                <TableCell>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <img src={logo} style={{ width: "30px" }} />
+                    <span style={{ marginLeft: "10px" }}>{symbol}</span>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  {balance} {symbol}
+                </TableCell>
+                <TableCell>${price}</TableCell>
               </TableRow>
-            </TableHead>
-            <TableBody>
-              {/* Add your table rows here */}
-              <TableRow>
-                <TableCell>Item 1</TableCell>
-                <TableCell>10</TableCell>
-                <TableCell>$100</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Item 2</TableCell>
-                <TableCell>20</TableCell>
-                <TableCell>$200</TableCell>
-              </TableRow>
-              {/* Add more rows as needed */}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </AccordionDetails>
-    </Accordion>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 
