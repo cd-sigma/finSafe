@@ -54,13 +54,7 @@ async function calculateHealthFactor(req, res) {
 
         address = address.toLowerCase()
 
-        const position = await mongoLib.findOneByQuery(positionModel, {owner: address})
-
-        if (validatorUtil.isEmpty(position)) {
-            return responseLib.sendResponse(res, null, "No position found", resStatusEnum.VALIDATION_ERROR)
-        }
-
-        const healthFactor = await healthFactorResolver.calculateHealthFactor(position, web3, collateralAssets, collateralAmounts, collateralPrices, debtAssets, debtAmounts, debtPrices, liquidationThresholds)
+        const healthFactor = await healthFactorResolver.calculateHealthFactor(web3, collateralAssets, collateralAmounts, collateralPrices, debtAssets, debtAmounts, debtPrices, liquidationThresholds)
 
         return responseLib.sendResponse(res, healthFactor, null, resStatusEnum.SUCCESS)
 
