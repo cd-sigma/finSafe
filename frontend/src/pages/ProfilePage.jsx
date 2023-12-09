@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 
 import Navbar from "../components/Navbar";
+import PortfolioDetails from "../components/PortfolioDetails";
 
 const ProfilePage = () => {
   const [currentTab, setCurrentTab] = React.useState(0);
@@ -50,7 +51,7 @@ const ProfilePage = () => {
         </div>
 
         {/* Bottom Section - Tabs (Portfolio and Feed) */}
-        <div style={{ marginTop: "30px", marginLeft: "30px" }}>
+        <div style={{ marginTop: "30px", marginLeft: "30px", marginRight: "30px" }}>
           <AppBar
             position="static"
             color="default"
@@ -76,7 +77,7 @@ const ProfilePage = () => {
             {currentTab === 0 && (
               <div>
                 <Typography variant="h6">
-                  Portfolio Content Goes Here
+                  <PortfolioDetails/>
                 </Typography>
               </div>
             )}
