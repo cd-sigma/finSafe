@@ -2,6 +2,12 @@ import create from "zustand";
 import { devtools, persist } from "zustand/middleware";
 let userStore = (set) => ({
     userAddress:"",
+    suppliedDetails:[],
+    borrowedDetails:[],
+    search:"",
+     setSearch :(value) => set((state) => ({...state, search: value})),
+    setBorrowedDetails: (value) => set((state) => ({...state, borrowedDetails: value})),
+    setSuppliedDetails: (value) => set((state) => ({...state, suppliedDetails: value})),
     setUserAddress: (value) => set((state) => ({...state, userAddress: value})),
     feedData:[],
     setFeedData:(value)=>set((state)=>({...state,feedData:value})),

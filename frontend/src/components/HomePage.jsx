@@ -12,7 +12,7 @@ const HomePage = () => {
   const setUserAddress = useUserStore((state) => state.setUserAddress)
   const [open, setOpen] = useState(false);
   const [signer, setSigner] = useState(null);
-  
+  const searchId=window.location.pathname.split('/')[2];
   const onPressConnect = async () => {
     setLoading(true);
     try {
