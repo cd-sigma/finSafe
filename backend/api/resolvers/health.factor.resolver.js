@@ -10,11 +10,13 @@ async function calculateHealthFactor(web3, supplied, borrowed) {
         let borrowSum = 0
 
         for (const supply of supplied) {
-            collateralSum = collateralSum + ((parseFloat(supply.balance) * parseFloat(supply.usdPrice) * parseFloat(supply.liqudationThreshold)) / supply.ethPrice)
+            const ethPrice = await priceLib.getTokenPriceFromChainlinkPriceOracle("eth", "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2", web3)
+            collateralSum = collateralSum + ((parseFloat(supply.balance) * parseFloat(supply.usdPrice) * parseFloat(supply.liqudationThreshold)) / parseFloat(ethPrice.usdPrice))
         }
 
         for (const borrow of borrowed) {
-            borrowSum = borrowSum + ((parseFloat(borrow.balance) * parseFloat(borrow.usdPrice)) / borrow.ethPrice)
+            const ethPrice = await priceLib.getTokenPriceFromChainlinkPriceOracle("eth", "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2", web3)
+            borrowSum = borrowSum + ((parseFloat(borrow.balance) * parseFloat(borrow.usdPrice)) / parseFloat(ethPrice.usdPrice))
         }
 
         return collateralSum / borrowSum
