@@ -1,14 +1,5 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: black; /* Replace with your image path */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    color: white;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    ; /* Adjust the opacity as needed */
+    background-color: black;
   }

@@ -37,24 +37,11 @@ async function defaultHealthFactor(req, res) {
 async function calculateHealthFactor(req, res) {
     try {
         let web3 = await web3Lib.getWebSocketWeb3Instance(process.env.ETH_NODE_WS_URL);
-        let {address} = req.params
         let {
-            collateralAssets = [],
-            collateralAmounts = [],
-            collateralPrices = [],
-            debtAssets = [],
-            debtAmounts = [],
-            debtPrices = [],
-            liquidationThresholds = []
+            supplied = [], borrowed = []
         } = req.body
 
-        if (validatorUtil.isEmpty(address)) {
-            return responseLib.sendResponse(res, null, "Missing user address", resStatusEnum.VALIDATION_ERROR)
-        }
-
-        address = address.toLowerCase()
-
-        const healthFactor = await healthFactorResolver.calculateHealthFactor(web3, collateralAssets, collateralAmounts, collateralPrices, debtAssets, debtAmounts, debtPrices, liquidationThresholds)
+        const healthFactor = await healthFactorResolver.calculateHealthFactor(web3, supplied, borrowed)
 
         return responseLib.sendResponse(res, healthFactor, null, resStatusEnum.SUCCESS)
 
@@ -65,6 +52,5 @@ async function calculateHealthFactor(req, res) {
 }
 
 module.exports = {
-    calculateHealthFactor: calculateHealthFactor,
-    defaultHealthFactor: defaultHealthFactor
+    calculateHealthFactor: calculateHealthFactor, defaultHealthFactor: defaultHealthFactor
 }

@@ -12,11 +12,16 @@ import { useUserStore } from "../store/userStore";
 
 import { getPortfolioDetails, getTokenDetails } from "../api/profile.api";
 
-const PortfolioDetails = ({searchId}) => {
-  const [suppliedDetails, setSuppliedDetails] = useState([]);
-  const [borrowedDetails, setBorrowedDetails] = useState([]);
+const PortfolioDetails = ({searchId,isActive}) => {
+  const [loading, setLoading] = useState(false);
+  const suppliedDetails = useUserStore((state) => state.suppliedDetails);
+  const setBorrowedDetails = useUserStore((state) => state.setBorrowedDetails);
+  const borrowedDetails = useUserStore((state) => state.borrowedDetails);
+  const setSuppliedDetails = useUserStore((state) => state.setSuppliedDetails);
+  const search = useUserStore((state) => state.search);
+
   let userAddress = useUserStore((state) => state.userAddress);
-  userAddress = "0xb63e8a8d04999500a97470769d10c4395789836d";
+
   const convertSuppliedToDesiredFormat = async (array) => {
     try {
       const result = await Promise.all(
@@ -75,16 +80,19 @@ const PortfolioDetails = ({searchId}) => {
     const details = await getPortfolioDetails(searchId);
     const { metadata } = details[0];
     const { supplied, borrowed } = metadata;
+    setLoading(true);
     const derivedSupplied = await convertSuppliedToDesiredFormat(supplied);
     const derivedBorrowed = await convertBorrowedToDesiredFormat(borrowed);
     setSuppliedDetails(derivedSupplied);
     setBorrowedDetails(derivedBorrowed);
+    setLoading(false);
   };
   useEffect(() => {
     callApis();
-  }, [searchId]);
+  }, [search,searchId]);
   //   console.log(suppliedDetails);
   return (
+    
     <TableContainer component={Paper}>
       <Table>
         {suppliedDetails.length > 0 && (

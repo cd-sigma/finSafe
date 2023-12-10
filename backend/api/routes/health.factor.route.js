@@ -4,6 +4,6 @@ const healthFactorController = require("../controllers/health.factor.controller"
 
 router.route("/:address").get(healthFactorController.defaultHealthFactor)
 
-router.route("/calculate/:address").get(healthFactorController.calculateHealthFactor)
+router.route("/calculate").post(healthFactorController.calculateHealthFactor)
 
 module.exports = router
