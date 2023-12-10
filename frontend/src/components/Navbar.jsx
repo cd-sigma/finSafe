@@ -3,7 +3,7 @@ import React from 'react';
 import { AppBar, Toolbar, Typography, InputBase, Button, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom';
-
+import { Link } from 'react-router-dom';
 // Logo
 import Logo from "../assets/finsafe-logo.png";
 import { useUserStore } from '../store/userStore';
@@ -24,9 +24,11 @@ const Navbar = () => {
     <AppBar position="static" sx={{paddingTop:"25px", paddingLeft:"20px", paddingRight:"15px", backgroundColor:"black"}}>
       <Toolbar sx={{ justifyContent: 'space-between', background: 'black' }}>
         {/* Logo on the Left */}
+        <Link to="/">
         <Typography variant="h6" component="div">
-          <img src={Logo} style={{width:"105px"}}/>
+          <img src={Logo} style={{width:"105px",cursor:"pointer"}} />
         </Typography>
+        </Link>
      
         {/* Search Bar in the Center */}
         <div sx={{ flexGrow: 1 }}>
