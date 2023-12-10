@@ -19,9 +19,7 @@ const PortfolioDetails = ({searchId,isActive}) => {
   const borrowedDetails = useUserStore((state) => state.borrowedDetails);
   const setSuppliedDetails = useUserStore((state) => state.setSuppliedDetails);
   const search = useUserStore((state) => state.search);
-
-  let userAddress = useUserStore((state) => state.userAddress);
-
+  const [userData,setUserData]=useState({});
   const convertSuppliedToDesiredFormat = async (array) => {
     try {
       const result = await Promise.all(
@@ -78,15 +76,17 @@ const PortfolioDetails = ({searchId,isActive}) => {
 
   const callApis = async () => {
     const details = await getPortfolioDetails(searchId);
-    const { metadata } = details[0];
+    const { metadata } = details[0];  
     const { supplied, borrowed } = metadata;
-    setLoading(true);
     const derivedSupplied = await convertSuppliedToDesiredFormat(supplied);
+    const data=await getPortfolioDetails(searchId);
+    setUserData(data[0]);
     const derivedBorrowed = await convertBorrowedToDesiredFormat(borrowed);
     setSuppliedDetails(derivedSupplied);
     setBorrowedDetails(derivedBorrowed);
-    setLoading(false);
   };
+  console.log(userData);
+  
   useEffect(() => {
     callApis();
   }, [search,searchId]);

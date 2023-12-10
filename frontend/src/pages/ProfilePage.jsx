@@ -11,6 +11,7 @@ import {Avatars} from '../utils/index'
 import Navbar from "../components/Navbar";
 import {FeedPage} from "./FeedPage";
 import PortfolioDetails from "../components/PortfolioDetails";
+import { useUserStore } from "../store/userStore";
 
 const ProfilePage = () => {
   const [currentTab, setCurrentTab] = React.useState(0);
@@ -19,7 +20,9 @@ const ProfilePage = () => {
   const handleTabChange = (event, newValue) => {
     setCurrentTab(newValue);
   };
+  const userData=useUserStore((state) => state.userData);
   const searchId=window.location.pathname.split('/')[2];
+  console.log(userData);
 
   return (
     <>
@@ -31,6 +34,7 @@ const ProfilePage = () => {
           minHeight: "100vh",
           paddingTop: "10px",
           width: "100vw",
+          marginLeft: "0px",
         }}
       >
         {/* Top Section - User Profile */}
@@ -39,7 +43,8 @@ const ProfilePage = () => {
             display: "flex",
             alignItems: "center",
             marginTop: "20px",
-            marginLeft: "30px",
+            marginLeft: "55px",
+
           }}
         >
           <Avatar
@@ -49,7 +54,8 @@ const ProfilePage = () => {
           />
           <div>
             <Typography variant="h6">{searchId.slice(0,5)+'...'+searchId.slice(-4)}</Typography>
-            <Typography variant="subtitle1">Secured</Typography>
+            <Typography variant="subtitle1" sx={{color:'green'}}>Secured</Typography>
+          
           </div>
         </div>
 
