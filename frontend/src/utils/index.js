@@ -16,3 +16,22 @@ export const  calculateRelativeTime=(eventTimestamp) =>{
       return `${days} day${days !== 1 ? 's' : ''} ago`;
     }
   }
+  export const Avatars=[
+    "https://www.larvalabs.com/cryptopunks/cryptopunk9166.png",
+    "https://www.larvalabs.com/cryptopunks/cryptopunk7804.png",
+    "https://www.larvalabs.com/cryptopunks/cryptopunk3100.png",
+    "https://www.larvalabs.com/cryptopunks/cryptopunk2645.png",
+    "https://www.larvalabs.com/cryptopunks/cryptopunk6487.png",
+    "https://www.larvalabs.com/cryptopunks/cryptopunk9166.png",
+    "https://www.larvalabs.com/cryptopunks/cryptopunk7804.png",
+    "https://www.larvalabs.com/cryptopunks/cryptopunk3100.png",
+    "https://www.larvalabs.com/cryptopunks/cryptopunk2645.png",
+    "https://www.larvalabs.com/cryptopunks/cryptopunk6487.png",
+    "https://www.larvalabs.com/cryptopunks/cryptopunk9166.png",
+    "https://www.larvalabs.com/cryptopunks/cryptopunk7804.png",
+    "https://www.larvalabs.com/cryptopunks/cryptopunk3100.png",
+    "https://www.larvalabs.com/cryptopunks/cryptopunk2645.png",
+    "https://www.larvalabs.com/cryptopunks/cryptopunk6487.png",
+  
+  ]
+
