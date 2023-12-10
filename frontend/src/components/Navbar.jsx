@@ -6,17 +6,20 @@ import { useNavigate } from 'react-router-dom';
 
 // Logo
 import Logo from "../assets/finsafe-logo.png";
+import { useUserStore } from '../store/userStore';
 
 const Navbar = () => {
-  const [search, setSearch] = React.useState(''); 
+  
   const navigate=useNavigate();
-  console.log(search);
+  const search=useUserStore((state) => state.search);
+  const setSearch=useUserStore((state) => state.setSearch);
   const handleKeyDown = (event) => {
     
     if (event.key === 'Enter') {
       navigate(`/profile/${search}`);
     }   
   };
+ 
   return (
     <AppBar position="static" sx={{paddingTop:"25px", paddingLeft:"20px", paddingRight:"15px", backgroundColor:"black"}}>
       <Toolbar sx={{ justifyContent: 'space-between', background: 'black' }}>

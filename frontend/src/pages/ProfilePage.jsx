@@ -7,7 +7,7 @@ import {
   Tabs,
   Typography,
 } from "@mui/material";
-
+import {Avatars} from '../utils/index'
 import Navbar from "../components/Navbar";
 import {FeedPage} from "./FeedPage";
 import PortfolioDetails from "../components/PortfolioDetails";
@@ -15,6 +15,7 @@ import PortfolioDetails from "../components/PortfolioDetails";
 const ProfilePage = () => {
   const [currentTab, setCurrentTab] = React.useState(0);
   const [isFeedReference,setisFeedReference]=React.useState(false);
+  const random = Math.floor(Math.random() * 10);
   const handleTabChange = (event, newValue) => {
     setCurrentTab(newValue);
   };
@@ -43,11 +44,11 @@ const ProfilePage = () => {
         >
           <Avatar
             alt="User Avatar"
-            src="https://via.placeholder.com/150"
+            src= {Avatars[random]}
             sx={{ width: 120, height: 120, marginRight: "20px" }}
           />
           <div>
-            <Typography variant="h5">0x1324...3242</Typography>
+            <Typography variant="h6">{searchId.slice(0,5)+'...'+searchId.slice(-4)}</Typography>
             <Typography variant="subtitle1">Secured</Typography>
           </div>
         </div>
